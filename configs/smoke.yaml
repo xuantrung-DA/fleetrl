@@ -1,0 +1,17 @@
+env:
+  n_robots: 5
+  horizon_s: 120.0
+  demand_per_hour: 90.0
+  solver_time_limit_s: 0.03
+  disturbances: false
+train:
+  total_timesteps: 128
+  n_envs: 1
+  n_steps: 64
+  batch_size: 32
+  n_epochs: 2
+  eval_freq: 128
+  checkpoint_freq: 128
+  eval_seeds: [1000]
+  curriculum: false
+  tensorboard: false

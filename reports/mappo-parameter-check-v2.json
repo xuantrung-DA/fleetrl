@@ -1,0 +1,8 @@
+{
+  "source_hash": "09b0868080cb0f2bfb4d326a5f250a9c7c9da939a0b25452e3001616b60f7033",
+  "checkpoint_sha256": "ee999dd594ca174e3cef8ce6a05bcc4e68c4c3a3f842f5f676b624384864899a",
+  "changed": {
+    "actor": true,
+    "critic": true
+  }
+}

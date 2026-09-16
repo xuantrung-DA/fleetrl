@@ -1,0 +1,11 @@
+env:
+  n_robots: 20
+  horizon_s: 3600.0
+  demand_per_hour: 120.0
+train:
+  total_timesteps: 300000
+  n_envs: 2
+  encoder: entities
+  device: cpu
+  seed: 11
+  eval_seeds: [1000, 1001, 1002]

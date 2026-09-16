@@ -1,0 +1,12 @@
+schema_version: 2
+study:
+  methods: [heuristic, fixed_cpsat, forecast_mpc_milp]
+  training_seeds: [11]
+  validation_seeds: [1000]
+  tape_seeds: [2000, 2001]
+  total_timesteps: 32
+  horizon_s: 30
+  scenarios: [S1]
+  matched_ood: true
+  bootstrap_samples: 100
+  config_dir: configs/methods

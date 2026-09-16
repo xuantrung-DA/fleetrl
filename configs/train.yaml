@@ -1,0 +1,28 @@
+env:
+  n_robots: 15
+  horizon_s: 3600.0
+  demand_per_hour: 90.0
+  advanced_charging: true
+  controller: hybrid
+train:
+  total_timesteps: 300000
+  n_envs: 2
+  encoder: entities
+  device: cpu
+  seed: 11
+  n_steps: 1024
+  batch_size: 256
+  n_epochs: 10
+  learning_rate: 0.0003
+  gamma: 0.995
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+  target_kl: 0.02
+  eval_freq: 10000
+  checkpoint_freq: 10000
+  eval_seeds: [1000, 1001, 1002]
+  train_seed_min: 0
+  train_seed_max: 199
+  curriculum: true
+  torch_threads: 1

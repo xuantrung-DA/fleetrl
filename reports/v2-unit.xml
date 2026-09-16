@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.795" timestamp="2026-09-11T22:15:13.860348+07:00" hostname="TRUNG"><testcase classname="" name="tests.test_methods_v2" time="0.000"><error message="collection failure">ImportError while importing test module 'D:\FleetRL_ReadyToTrain_Source\fleetrl\tests\test_methods_v2.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+C:\Program Files\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_methods_v2.py:8: in &lt;module&gt;
+    from fleetrl.optimizer import FleetOptimizer
+src\fleetrl\optimizer.py:24: in &lt;module&gt;
+    from ortools.sat.python import cp_model
+.venv\Lib\site-packages\ortools\sat\python\cp_model.py:66: in &lt;module&gt;
+    import pandas as pd
+E   ModuleNotFoundError: No module named 'pandas'</error></testcase></testsuite></testsuites>

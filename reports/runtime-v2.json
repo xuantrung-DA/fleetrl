@@ -1,0 +1,17 @@
+{
+  "python": "3.12.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "1.26.4",
+    "gymnasium": "1.2.3",
+    "torch": "2.6.0",
+    "stable-baselines3": "2.7.0",
+    "sb3-contrib": "2.7.0",
+    "ortools": "9.14.6206",
+    "pygame": "2.5.2",
+    "psutil": "6.1.1"
+  },
+  "git_commit": null,
+  "source_tree_sha256": "09b0868080cb0f2bfb4d326a5f250a9c7c9da939a0b25452e3001616b60f7033",
+  "created_utc": "2026-09-11T15:33:24.479942+00:00"
+}

@@ -1,0 +1,9 @@
+schema_version: 2
+method:
+  name: dqn_cpsat
+  observation_mode: compact
+train:
+  encoder: mlp
+  total_timesteps: 300000
+  seed: 11
+  buffer_size: 20000

@@ -1,0 +1,16 @@
+schema_version: 2
+method: mappo_dispatch
+env:
+  n_robots: 15
+  horizon_s: 3600
+train:
+  total_timesteps: 300000
+  n_envs: 1
+  seed: 11
+  n_steps: 1024
+  batch_size: 256
+  n_epochs: 10
+  eval_seeds: [1000, 1001, 1002]
+  learning_rate: 0.0003
+  curriculum: true
+  tensorboard: true

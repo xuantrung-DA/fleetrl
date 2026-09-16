@@ -1,0 +1,7 @@
+schema_version: 2
+method:
+  name: ppo_cpsat
+  action_mode: continuous
+train:
+  total_timesteps: 300000
+  seed: 11

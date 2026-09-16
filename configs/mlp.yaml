@@ -1,0 +1,9 @@
+env:
+  n_robots: 15
+  horizon_s: 3600.0
+  demand_per_hour: 90.0
+train:
+  encoder: mlp
+  total_timesteps: 300000
+  n_envs: 2
+  seed: 11

@@ -1,0 +1,10 @@
+schema_version: 2
+method:
+  name: ppo_cpsat
+  observation_mode: compact
+env:
+  horizon_s: 3600
+train:
+  encoder: mlp
+  total_timesteps: 300000
+  seed: 11

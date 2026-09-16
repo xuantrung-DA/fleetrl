@@ -1,0 +1,14 @@
+# FleetRL v2 direct dependencies; tested on Windows/Python 3.12 CPU.
+numpy==1.26.4
+PyYAML==6.0.2
+gymnasium==1.2.3
+stable-baselines3==2.7.0
+sb3-contrib==2.7.0
+torch==2.6.0
+ortools==9.14.6206
+pygame==2.5.2
+matplotlib==3.10.1
+tensorboard==2.16.2
+psutil==6.1.1
+pytest==9.1.1
+-e .

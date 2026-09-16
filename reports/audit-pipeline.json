@@ -1,0 +1,364 @@
+{
+  "source_hash": "f365b0b65c653b5e44a39e4e2ac2cef7bd825d2066790854861bc9ec6ae3ef31",
+  "phases": [
+    {
+      "phase": "tune",
+      "limit": null,
+      "result": {
+        "phase": "tune",
+        "selected": {
+          "fixed_cpsat": {
+            "fixed_profile": 0
+          }
+        },
+        "status": "complete",
+        "failed_jobs": 0
+      }
+    },
+    {
+      "phase": "search",
+      "limit": null,
+      "result": {
+        "phase": "search",
+        "selected": {
+          "dqn_cpsat": {
+            "train": {
+              "learning_rate": 0.0003
+            },
+            "env": {},
+            "trial": 0,
+            "rank": [
+              -0.0,
+              0.0,
+              -0.0,
+              -2.0
+            ]
+          },
+          "ppo_threshold_cpsat": {
+            "train": {
+              "learning_rate": 0.0003
+            },
+            "env": {
+              "charge_threshold": 0.3
+            },
+            "trial": 0,
+            "rank": [
+              -0.0,
+              0.0,
+              -0.0,
+              -2.0
+            ]
+          }
+        },
+        "status": "complete",
+        "failed_jobs": 0
+      }
+    },
+    {
+      "phase": "train",
+      "limit": 1,
+      "result": {
+        "phase": "train",
+        "completed_training_jobs": 1,
+        "plan": {
+          "study": {
+            "methods": [
+              "fixed_cpsat",
+              "dqn_cpsat",
+              "ppo_threshold_cpsat"
+            ],
+            "training_seeds": [
+              11
+            ],
+            "tape_seeds": [
+              2000,
+              2001
+            ],
+            "validation_seeds": [
+              1000
+            ],
+            "scenarios": [
+              "S1"
+            ],
+            "train_seed_min": 0,
+            "train_seed_max": 199,
+            "total_timesteps": 32,
+            "horizon_s": 10,
+            "config_dir": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\method_configs",
+            "bootstrap_samples": 50,
+            "search_steps": 16,
+            "search_trials": [
+              0.0003
+            ],
+            "search_q_alphas": [
+              0.1
+            ],
+            "search_thresholds": [
+              0.3
+            ],
+            "matched_ood": true,
+            "pretrained_study": null
+          },
+          "protocol_hash": "cc4bb6c5b67617e2cb50ae94a8c5a8c97f33537f5554ca7931a6bf37011a3fa5",
+          "training_jobs": 2,
+          "requested_training_steps": 64,
+          "core_test_episodes": 6,
+          "matched_control_episodes": 12,
+          "search_jobs": 2,
+          "search_steps_per_method": 16,
+          "expected_grid": {
+            "fixed_cpsat": {
+              "training_seeds": [
+                "deterministic"
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            },
+            "dqn_cpsat": {
+              "training_seeds": [
+                11
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            },
+            "ppo_threshold_cpsat": {
+              "training_seeds": [
+                11
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            }
+          },
+          "note": "Execution readiness is separate from convergence or algorithm superiority. Budgets count fleet decisions."
+        },
+        "status": "partial",
+        "failed_jobs": 0
+      }
+    },
+    {
+      "phase": "train",
+      "limit": null,
+      "result": {
+        "phase": "train",
+        "completed_training_jobs": 2,
+        "plan": {
+          "study": {
+            "methods": [
+              "fixed_cpsat",
+              "dqn_cpsat",
+              "ppo_threshold_cpsat"
+            ],
+            "training_seeds": [
+              11
+            ],
+            "tape_seeds": [
+              2000,
+              2001
+            ],
+            "validation_seeds": [
+              1000
+            ],
+            "scenarios": [
+              "S1"
+            ],
+            "train_seed_min": 0,
+            "train_seed_max": 199,
+            "total_timesteps": 32,
+            "horizon_s": 10,
+            "config_dir": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\method_configs",
+            "bootstrap_samples": 50,
+            "search_steps": 16,
+            "search_trials": [
+              0.0003
+            ],
+            "search_q_alphas": [
+              0.1
+            ],
+            "search_thresholds": [
+              0.3
+            ],
+            "matched_ood": true,
+            "pretrained_study": null
+          },
+          "protocol_hash": "cc4bb6c5b67617e2cb50ae94a8c5a8c97f33537f5554ca7931a6bf37011a3fa5",
+          "training_jobs": 2,
+          "requested_training_steps": 64,
+          "core_test_episodes": 6,
+          "matched_control_episodes": 12,
+          "search_jobs": 2,
+          "search_steps_per_method": 16,
+          "expected_grid": {
+            "fixed_cpsat": {
+              "training_seeds": [
+                "deterministic"
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            },
+            "dqn_cpsat": {
+              "training_seeds": [
+                11
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            },
+            "ppo_threshold_cpsat": {
+              "training_seeds": [
+                11
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            }
+          },
+          "note": "Execution readiness is separate from convergence or algorithm superiority. Budgets count fleet decisions."
+        },
+        "status": "complete",
+        "failed_jobs": 0
+      }
+    },
+    {
+      "phase": "test",
+      "limit": 1,
+      "result": {
+        "status": "partial",
+        "complete_episodes": 1,
+        "expected_episodes": 18,
+        "failed_jobs": 0,
+        "report": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\study\\report.md"
+      }
+    },
+    {
+      "phase": "test",
+      "limit": null,
+      "result": {
+        "status": "complete",
+        "complete_episodes": 18,
+        "expected_episodes": 18,
+        "failed_jobs": 0,
+        "report": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\study\\report.md"
+      }
+    },
+    {
+      "phase": "report",
+      "limit": null,
+      "result": {
+        "status": "complete",
+        "complete_episodes": 18,
+        "expected_episodes": 18,
+        "failed_jobs": 0,
+        "report": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\study\\report.md"
+      }
+    },
+    {
+      "phase": "train",
+      "limit": 0,
+      "result": {
+        "phase": "train",
+        "completed_training_jobs": 2,
+        "plan": {
+          "study": {
+            "methods": [
+              "fixed_cpsat",
+              "dqn_cpsat",
+              "ppo_threshold_cpsat"
+            ],
+            "training_seeds": [
+              11
+            ],
+            "tape_seeds": [
+              2000,
+              2001
+            ],
+            "validation_seeds": [
+              1000
+            ],
+            "scenarios": [
+              "S1"
+            ],
+            "train_seed_min": 0,
+            "train_seed_max": 199,
+            "total_timesteps": 32,
+            "horizon_s": 10,
+            "config_dir": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\method_configs",
+            "bootstrap_samples": 50,
+            "search_steps": 16,
+            "search_trials": [
+              0.0003
+            ],
+            "search_q_alphas": [
+              0.1
+            ],
+            "search_thresholds": [
+              0.3
+            ],
+            "matched_ood": true,
+            "pretrained_study": null
+          },
+          "protocol_hash": "cc4bb6c5b67617e2cb50ae94a8c5a8c97f33537f5554ca7931a6bf37011a3fa5",
+          "training_jobs": 2,
+          "requested_training_steps": 64,
+          "core_test_episodes": 6,
+          "matched_control_episodes": 12,
+          "search_jobs": 2,
+          "search_steps_per_method": 16,
+          "expected_grid": {
+            "fixed_cpsat": {
+              "training_seeds": [
+                "deterministic"
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            },
+            "dqn_cpsat": {
+              "training_seeds": [
+                11
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            },
+            "ppo_threshold_cpsat": {
+              "training_seeds": [
+                11
+              ],
+              "tape_seeds": [
+                2000,
+                2001
+              ]
+            }
+          },
+          "note": "Execution readiness is separate from convergence or algorithm superiority. Budgets count fleet decisions."
+        },
+        "status": "complete",
+        "failed_jobs": 0
+      }
+    },
+    {
+      "phase": "test",
+      "limit": 0,
+      "result": {
+        "status": "complete",
+        "complete_episodes": 18,
+        "expected_episodes": 18,
+        "failed_jobs": 0,
+        "report": "D:\\FleetRL_ReadyToTrain_Source\\fleetrl\\runs\\audit_pipeline_final\\study\\report.md"
+      }
+    }
+  ],
+  "status": "passed"
+}

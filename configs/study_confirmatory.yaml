@@ -1,0 +1,10 @@
+schema_version: 2
+study:
+  pretrained_study: runs/study14
+  training_seeds: [11, 12, 13]
+  validation_seeds: [1000, 1001, 1002]
+  tape_seeds: [3000, 3001, 3002, 3003, 3004]
+  total_timesteps: 300000
+  horizon_s: 3600
+  scenarios: [S1, S2, S3, S4, S5, S6, S7, S8, S9]
+  matched_ood: true
