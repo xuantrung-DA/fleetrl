@@ -1,0 +1,20 @@
+{
+  "protocol_hash": "488d9d1d51601f8fdba174dd8b671e391066648cdf6217f357257e6a87d368e6",
+  "source_hash": "fc476919a6b3e0ad9c2b5c66a909a155d8f742a0f49431e3d29898849e4309de",
+  "method_config_hashes": {
+    "heuristic": "52af7d45e4f4b8b7b21023bf41de549dc0410f11659c6c7be1c1da8c69246a3b",
+    "fixed_cpsat": "a9f445b9326e4e7e6789164e50d09cd3008cb8a3d7e9cf7e66b28c6594db58df",
+    "qlearning_cpsat": "4acf23e7f3842792a49b5f4af032d32eded9b1d9292cfcd7bee5ad69b812c6c4",
+    "dqn_cpsat": "7f49389797db2ac105263fa5fb9338e98f125034fe68983940a413d5abbdcf4d",
+    "a2c_cpsat": "db18d57bc2a6336598f033e052c1cbf65f6755580dfdf74924e28463b133c263",
+    "ppo_cpsat": "989c6f8314e47f826947252d7df0b674bf19670c23c6724c72190c4dd94fed88",
+    "qrdqn_cpsat": "9d05a34408241fddfb99c03c8526887e563742d0876eac937a72a8e25b230734",
+    "recurrent_ppo_cpsat": "dd39ab58219dc1fb20aeeeb822398268663bbf8ce11f2ba04b1c51b14b1eaa2d",
+    "ppo_threshold_cpsat": "96565053786f64d6471ebc041f0c20a98506e4abea96fa8e435af2387edaedd5",
+    "sac_cpsat": "e5de1f715c150507dc1611ddede6550f6ace3c131866245f18dae1ea15e0c68c",
+    "td3_cpsat": "1ea63c1d664d0058ad8eaf4e5fe4c5a8b5eb1584d2cefbba2b7deb7e6076f822",
+    "mappo_dispatch": "598d8ee4ee33368032a082c0a43d5222d134b3fa8051830a9b0f6fa60e475112",
+    "forecast_mpc_milp": "549d839cf9a1af976bf9f0a3b29e8a00f6040627abc14bb0412b1db7ba82207a",
+    "ppo_milp": "7f6dc85903522840a145c4badcd789ed4e51400fb8ac22c737192271857a823f"
+  }
+}

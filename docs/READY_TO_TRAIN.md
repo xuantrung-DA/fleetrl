@@ -30,6 +30,12 @@ Sau khi dọn format/import, source hash thay đổi. Các báo cáo cũ chỉ x
 
 Đổi tên config để dùng phương án khác. V01 heuristic, V02 fixed CP-SAT, V13 forecast MPC không có policy RL để train; dùng tune/eval. Q-learning và MAPPO hiện chạy một environment; SB3 hỗ trợ nhiều worker bằng Windows spawn. `--steps` là số fleet transitions yêu cầu; thuật toán theo rollout có thể vượt số bước để hoàn tất rollout, số thực được ghi rõ.
 
+Để chạy toàn bộ study bằng double-click, mở `scripts/run_all_methods.bat`. File này gọi `scripts/train_study.ps1` với môi trường `fleetrl-env` và chạy lần lượt plan, tuning của ba controller cố định, search của 11 learner, 33 lượt train chính (11 phương pháp × seed 11/12/13 × 300.000 bước = 9,9 triệu bước), toàn bộ test và report. Cửa sổ `scripts/watch_all_methods.bat` tự mở và hiển thị trạng thái 14 phương pháp, số job đã xong và bước mới nhất theo log/checkpoint mỗi 20 giây. Có thể double-click file theo dõi riêng. Search có thêm 33 trial × 10.000 bước, nằm ngoài 9,9 triệu bước train chính; tuning/test cũng cần thêm thời gian. Study lưu tại `runs/study14/`, tự kiểm tra artifact đã xong và có thể chạy lại để tiếp tục job thiếu. PPO–CP-SAT seed 11 đã train riêng tại `runs/ppo_cpsat/seed11_resume` không được tự gộp vào study vì lựa chọn tham số và hash của study phải khớp; PPO sẽ được train lại trong 33 job để giữ thí nghiệm nhất quán.
+
+Launcher kiểm tra tài nguyên trước mỗi pha và mỗi job search/train: chờ khi RAM trống dưới 8 GiB và dừng với thông báo khi ổ chứa study còn dưới 10 GiB. Máy 32 GiB RAM/RTX 4060 8 GiB VRAM vẫn dùng CPU cho policy nhỏ; mỗi job dùng một hoặc hai worker theo cấu hình và các job chạy tuần tự. Cách này tránh chiếm VRAM khi chưa có phép đo chứng minh GPU nhanh hơn. Replay buffer được giới hạn 2 GiB mỗi job. Validation của 11 learner chạy mỗi 30.000 bước thay vì 10.000 để giảm thời gian phụ; checkpoint vẫn mỗi 10.000 bước để dễ tiếp tục. Lịch validation thưa hơn có thể chọn `best_model` khác lịch cũ; 300.000 bước train chính, seed và test grid giữ nguyên. Kiểm tra trước job không bảo đảm chống hết mọi lỗi hệ thống hoặc thiếu RAM phát sinh trong một job; khi bị ngắt, chạy lại launcher để tiếp tục từ checkpoint hợp lệ.
+
+Sau mỗi job search/train hoàn thành, launcher dọn `latest_model` và replay của nó nếu các file này không nằm trong danh sách artifact được study xác minh. `best_model` và `final_model` cùng replay đi kèm vẫn được giữ để đánh giá, khôi phục và kiểm tra kết quả. Double-click `scripts/watch_cleanup.bat` để xem cửa sổ dọn file riêng; launcher `scripts/run_all_methods.bat` tự mở cửa sổ này. Cửa sổ báo còn hoạt động mỗi 60 giây và hiển thị lượng dung lượng đã giải phóng; nhật ký nằm trong `runs/study14/cleanup.log`.
+
 Resume vào thư mục mới, cùng config/seed:
 
 ```powershell
@@ -54,6 +60,8 @@ Validation và checkpoint định kỳ chạy ở biên rollout sau cập nhật
 ```
 
 Hoặc chạy `scripts/train_study.ps1`. Mặc định job tuần tự. Có thể thêm `--limit 1` để chạy thử một job; chạy lại lệnh sẽ kiểm hash và tiếp tục job còn thiếu. Sau khi đổi source/config/protocol cần output study mới. Không gộp số liệu từ source khác vào cùng bảng.
+
+Ngoại lệ khôi phục có kiểm soát: nếu một study dài bị chặn bởi lỗi trong simulator, lưu `source_migration.json` tại thư mục study với `from_source_hash` bằng hash trong `identity.json` và `to_source_hash` bằng hash nguồn sau khi sửa. Runner chỉ chấp nhận bản ghi khi protocol và toàn bộ method config giữ nguyên; `identity.json` cùng artifact cũ không bị sửa. Job train chưa xong có thể resume từ checkpoint cũ vào attempt mới, và manifest ghi cả hai hash. Job đã xong vẫn phải qua kiểm SHA-256. Test ghi hash nguồn của từng checkpoint để thấy study dùng hai phiên bản simulator; báo cáo của lần khôi phục này cần nêu rõ thay đổi mã nguồn, không coi là thí nghiệm đơn hash.
 
 Khi bắt đầu train, study khóa lựa chọn tham số học (kể cả lựa chọn dùng mặc định); khi test, study khóa baseline và checkpoint. Không chạy lại search/tune sau khi lựa chọn tương ứng đã khóa. Script tự bỏ qua các pha đã khóa khi chạy lại. Job thiếu hoặc trả episode chưa hoàn tất không được báo thành công; lệnh không có `--limit` trả exit code khác 0 nếu kết quả còn thiếu. Job đã hoàn thành phải qua kiểm hash cả khi xuất report. Nếu lần train bị ngắt sau khi đủ bước, study có thể hoàn tất artifact mà không học thêm một rollout.
 

@@ -1,0 +1,272 @@
+{
+  "study": {
+    "methods": [
+      "heuristic",
+      "fixed_cpsat",
+      "qlearning_cpsat",
+      "dqn_cpsat",
+      "a2c_cpsat",
+      "ppo_cpsat",
+      "qrdqn_cpsat",
+      "recurrent_ppo_cpsat",
+      "ppo_threshold_cpsat",
+      "sac_cpsat",
+      "td3_cpsat",
+      "mappo_dispatch",
+      "forecast_mpc_milp",
+      "ppo_milp"
+    ],
+    "training_seeds": [
+      11,
+      12,
+      13
+    ],
+    "tape_seeds": [
+      2000,
+      2001,
+      2002,
+      2003,
+      2004
+    ],
+    "validation_seeds": [
+      1000,
+      1001,
+      1002
+    ],
+    "scenarios": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "S5",
+      "S6",
+      "S7",
+      "S8",
+      "S9"
+    ],
+    "train_seed_min": 0,
+    "train_seed_max": 199,
+    "total_timesteps": 300000,
+    "horizon_s": 3600,
+    "config_dir": "configs/methods",
+    "bootstrap_samples": 2000,
+    "search_steps": 10000,
+    "search_trials": [
+      0.0001,
+      0.0003,
+      0.001
+    ],
+    "search_q_alphas": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "search_thresholds": [
+      0.2,
+      0.3,
+      0.4
+    ],
+    "matched_ood": true,
+    "pretrained_study": null
+  },
+  "protocol_hash": "488d9d1d51601f8fdba174dd8b671e391066648cdf6217f357257e6a87d368e6",
+  "training_jobs": 33,
+  "requested_training_steps": 9900000,
+  "core_test_episodes": 1620,
+  "matched_control_episodes": 360,
+  "search_jobs": 33,
+  "search_steps_per_method": 30000,
+  "expected_grid": {
+    "heuristic": {
+      "training_seeds": [
+        "deterministic"
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "fixed_cpsat": {
+      "training_seeds": [
+        "deterministic"
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "qlearning_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "dqn_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "a2c_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "ppo_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "qrdqn_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "recurrent_ppo_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "ppo_threshold_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "sac_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "td3_cpsat": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "mappo_dispatch": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "forecast_mpc_milp": {
+      "training_seeds": [
+        "deterministic"
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    },
+    "ppo_milp": {
+      "training_seeds": [
+        11,
+        12,
+        13
+      ],
+      "tape_seeds": [
+        2000,
+        2001,
+        2002,
+        2003,
+        2004
+      ]
+    }
+  },
+  "note": "Execution readiness is separate from convergence or algorithm superiority. Budgets count fleet decisions."
+}
