@@ -1,0 +1,16 @@
+{
+  "protocol_hash": "488d9d1d51601f8fdba174dd8b671e391066648cdf6217f357257e6a87d368e6",
+  "selected": {
+    "heuristic": {
+      "charge_threshold": 0.2
+    },
+    "fixed_cpsat": {
+      "fixed_profile": 1
+    },
+    "forecast_mpc_milp": {
+      "forecast_alpha": 0.1,
+      "mpc_horizon_s": 150.0
+    }
+  },
+  "complete": true
+}
