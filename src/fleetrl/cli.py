@@ -309,6 +309,12 @@ def build_parser() -> argparse.ArgumentParser:
     replay.add_argument("path")
     replay.add_argument("--max-frames", type=int)
     replay.add_argument("--screenshot")
+    demo3d = sub.add_parser("demo3d", help="Run the local live Three.js warehouse demo")
+    demo3d.add_argument("--study", default="runs/study14")
+    demo3d.add_argument("--scenario", choices=["S2", "S4", "S7", "S9"], default="S4")
+    demo3d.add_argument("--seed", type=int, default=2000)
+    demo3d.add_argument("--port", type=int, default=8765)
+    demo3d.add_argument("--output", default="runs/demo3d")
     profile = sub.add_parser("profile")
     common(profile)
     profile.add_argument("--decisions", type=int, default=1000)
@@ -376,6 +382,11 @@ def main(argv=None) -> int:
                     screenshot_path=args.screenshot,
                 )
             )
+            return 0
+        if args.command == "demo3d":
+            from .demo3d.server import run_server
+
+            run_server(args.study, args.scenario, args.seed, args.port, args.output)
             return 0
         cfg, tc = load_config(args.config)
         updates = {}

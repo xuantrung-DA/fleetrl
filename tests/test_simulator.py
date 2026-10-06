@@ -328,6 +328,30 @@ def test_deadlock_attempts_and_unresolved_hold_are_logged(tmp_path):
     assert sum(e["kind"] == "deadlock_recovery_attempt" for e in sim.events) == 2
 
 
+def test_recovering_robot_keeps_original_goal_across_another_deadlock(tmp_path):
+    sim = make_sim(tmp_path)
+    active = robot(position=(1, 2))
+    set_robots(sim, [active])
+    active.status = "to_pickup"
+    active.target_position = (5, 2)
+
+    sim._recover_deadlock(active)
+    sim._recover_deadlock(active)
+    bay = active.target_position
+    assert active.status == "recovering"
+    assert active.metadata["recovery_goal"] == ((5, 2), "to_pickup")
+
+    active.metadata.pop("deadlock_attempts")
+    sim._recover_deadlock(active)
+    sim._recover_deadlock(active)
+    assert active.metadata["recovery_goal"] == ((5, 2), "to_pickup")
+
+    active.position = bay
+    sim._arrived(active)
+    assert active.status == "to_pickup"
+    assert active.target_position == (5, 2)
+
+
 def test_energy_fault_keeps_task_and_nonnegative_battery(tmp_path):
     sim = make_sim(tmp_path)
     r = robot(position=(1, 2))

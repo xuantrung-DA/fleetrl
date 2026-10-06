@@ -112,6 +112,38 @@ def test_resume_rejects_changed_reward(trained, tmp_path):
         train_method(cfg.copy(reward_backlog=0.7), tc, tmp_path / "changed", result["final_model"])
 
 
+def test_resume_accepts_recorded_source_migration(trained, tmp_path, monkeypatch):
+    import fleetrl.learning.training as training
+
+    cfg, tc, result = trained
+    original_hash = checkpoint_metadata(result["final_model"])["source_hash"]
+    monkeypatch.setattr(training, "source_tree_hash", lambda: "patched")
+    with pytest.raises(ValueError, match="resume source differs"):
+        train_method(
+            cfg,
+            tc,
+            tmp_path / "blocked",
+            result["final_model"],
+            target_total_timesteps=16,
+        )
+
+    resumed = train_method(
+        cfg,
+        tc,
+        tmp_path / "migrated",
+        result["final_model"],
+        target_total_timesteps=16,
+        resume_source_hash=original_hash,
+    )
+    manifest = json.loads((tmp_path / "migrated" / "manifest.json").read_text())
+    assert resumed["status"] == "complete"
+    assert resumed["actual_additional_timesteps"] == 0
+    assert manifest["source_migration"] == {
+        "from_source_hash": original_hash,
+        "to_source_hash": "patched",
+    }
+
+
 def test_completed_budget_can_be_finalized_without_extra_updates(trained, tmp_path):
     cfg, tc, result = trained
     finalized = train_method(

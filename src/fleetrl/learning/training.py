@@ -15,7 +15,7 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.logger import configure
 from torch import nn
 
-from ..config import FleetConfig, save_config
+from ..config import FleetConfig, TrainConfig, save_config
 from ..evaluation import file_sha256, run_episode, runtime_manifest, source_tree_hash, write_json
 from ..methods.registry import get_method
 
@@ -280,7 +280,15 @@ def training_stages(cfg, tc, metadata=None):
     return plan, stages
 
 
-def train_method(cfg, tc, output, resume=None, *, target_total_timesteps=None):
+def train_method(
+    cfg: FleetConfig,
+    tc: TrainConfig,
+    output: str | Path,
+    resume: str | Path | None = None,
+    *,
+    target_total_timesteps: int | None = None,
+    resume_source_hash: str | None = None,
+) -> dict:
     from ..env import FleetEnv
     from ..experiments.resources import ResourceSampler
     from ..metrics import training_metrics
@@ -478,7 +486,12 @@ def train_method(cfg, tc, output, resume=None, *, target_total_timesteps=None):
                         if key in meta and meta[key] != value:
                             raise ValueError(f"incompatible resume {key}")
                     if meta and meta.get("source_hash") != source_tree_hash():
-                        raise ValueError("resume source differs; use a new training run")
+                        if not resume_source_hash or meta.get("source_hash") != resume_source_hash:
+                            raise ValueError("resume source differs; use a new training run")
+                        manifest["source_migration"] = {
+                            "from_source_hash": resume_source_hash,
+                            "to_source_hash": source_tree_hash(),
+                        }
                     for key, value in asdict(cfg).items():
                         if meta and json.dumps(meta["env"].get(key), sort_keys=True) != json.dumps(
                             value, sort_keys=True

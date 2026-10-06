@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Callable
 from dataclasses import asdict
 
 import gymnasium as gym
@@ -86,6 +87,10 @@ class FleetEnv(gym.Env):
         self._inference_ms = float(elapsed_ms)
         self._inference_failure = failure
 
+    def set_tick_observer(self, observer: Callable[[], None] | None = None) -> None:
+        """Register a read-only callback invoked after every physical simulator tick."""
+        self._tick_observer = observer
+
     def step(self, action):
         if self._done:
             raise RuntimeError("episode finished; call reset before step")
@@ -166,7 +171,15 @@ class FleetEnv(gym.Env):
         self.decision_logs.append(record)
         dt = min(self.config.decision_s, self.config.horizon_s - self.sim.time_s)
         advance_start = time.perf_counter()
-        self.sim.advance(dt)
+        if getattr(self, "_tick_observer", None) is None:
+            self.sim.advance(dt)
+        else:
+            remaining = dt
+            while remaining > 1e-9:
+                tick = min(self.config.tick_s, remaining)
+                self.sim.advance(tick)
+                self._tick_observer()
+                remaining -= tick
         record["advance_ms"] = (time.perf_counter() - advance_start) * 1000
         after = self.sim.time_s
         self._done = after >= self.config.horizon_s - 1e-8

@@ -936,7 +936,7 @@ class Simulator:
         if (
             attempts == 1
             and robot.load_kg == 0
-            and robot.status not in {"to_charge_port", "charge_egress"}
+            and robot.status not in {"to_charge_port", "charge_egress", "recovering"}
         ):
             occupied = {r.position for r in self.robots.values()} | {
                 r.target_position for r in self.robots.values()

@@ -65,8 +65,19 @@ def _locked_root(output, study):
     }
     previous = _read(output / "identity.json")
     if previous and previous != identity:
-        raise ValueError("source/config/protocol changed; use a new study output directory")
-    write_json(output / "identity.json", identity)
+        migration = _read(output / "source_migration.json", {})
+        same_protocol = (
+            previous.get("protocol_hash") == identity["protocol_hash"]
+            and previous.get("method_config_hashes") == identity["method_config_hashes"]
+        )
+        authorized_source = (
+            migration.get("from_source_hash") == previous.get("source_hash")
+            and migration.get("to_source_hash") == identity["source_hash"]
+        )
+        if not (same_protocol and authorized_source):
+            raise ValueError("source/config/protocol changed; use a new study output directory")
+    else:
+        write_json(output / "identity.json", identity)
     write_json(output / "plan.json", study_plan(study))
     return output
 
@@ -177,6 +188,10 @@ def run_study(path, output, phase="plan", limit=None):
     if phase == "plan":
         return study_plan(study)
     root = _locked_root(output, study)
+    original_source_hash = _read(root / "identity.json")["source_hash"]
+    resume_source_hash = (
+        original_source_hash if original_source_hash != source_tree_hash() else None
+    )
     limit_state = {"remaining": limit}
     if limit is not None and limit < 0:
         raise ValueError("limit must be nonnegative")
@@ -272,7 +287,12 @@ def run_study(path, output, phase="plan", limit=None):
                         resume = _resume_candidate(previous["output"])
                     opts = replace(tc, seed=seed)
                     result = train_method(
-                        cfg, opts, run, resume, target_total_timesteps=tc.total_timesteps
+                        cfg,
+                        opts,
+                        run,
+                        resume,
+                        target_total_timesteps=tc.total_timesteps,
+                        resume_source_hash=resume_source_hash,
                     )
                     result["selection"] = (
                         "validation_search" if name in selected else "predeclared_default"
@@ -291,7 +311,7 @@ def run_study(path, output, phase="plan", limit=None):
             "failed_jobs": _failures(root, "train_"),
         }
     if phase == "test":
-        return test_study(root, study, limit_state)
+        return test_study(root, study, limit_state, resume_source_hash)
     if phase == "report":
         return report_study(root, study)
     raise ValueError("unknown study phase")
@@ -397,9 +417,12 @@ def _tape(study, scenario, seed):
     return cfg, tape, workload
 
 
-def test_study(root, study, limit_state):
+def test_study(root, study, limit_state, resume_source_hash=None):
     from ..learning.training import load_checkpoint
 
+    allowed_sources = {source_tree_hash()}
+    if resume_source_hash:
+        allowed_sources.add(resume_source_hash)
     training_root = Path(study.pretrained_study) if study.pretrained_study else root
     tuned = _selection(root, training_root, "baselines", freeze=True)
     _selection(root, training_root, "learning", freeze=True)
@@ -419,7 +442,7 @@ def test_study(root, study, limit_state):
                 _verified_job(job, f"train_{name}_{training_seed}")
                 checkpoint = job["result"]["best_model"]
                 policy = load_checkpoint(checkpoint, expected_method=name)
-                if policy._fleetrl_metadata["source_hash"] != source_tree_hash():
+                if policy._fleetrl_metadata["source_hash"] not in allowed_sources:
                     raise ValueError("training checkpoint source differs from test source")
                 identity = {
                     "path": str(Path(checkpoint).resolve()),
@@ -447,6 +470,9 @@ def test_study(root, study, limit_state):
                             scenario=scenario,
                             training_seed=training_seed,
                             checkpoint=checkpoint,
+                            checkpoint_source_hash=(
+                                policy._fleetrl_metadata["source_hash"] if policy else None
+                            ),
                             workload_hash=workload,
                         )
                         write_json(run / "result.json", result)
@@ -498,6 +524,9 @@ def report_study(root, study):
         missing_jobs=missing,
         failed_jobs=failures,
     )
+    migration = _read(root / "source_migration.json")
+    if migration:
+        summary["source_migration"] = migration
     summary["generalization"] = (
         generalization_summary(records, [{"control": "OOD_A", "ood": "OOD_B"}])
         if study.matched_ood
@@ -524,6 +553,14 @@ def report_study(root, study):
         "| Method | Scenario | Complete / expected | Throughput/h | Pending | Lateness (s) | Safety incidents |",
         "| --- | --- | ---: | ---: | ---: | ---: | ---: |",
     ]
+    if migration:
+        lines[4:4] = [
+            "Source migration: this study resumed after a simulator fix. "
+            f"Original hash `{migration['from_source_hash']}`; "
+            f"patched hash `{migration['to_source_hash']}`. "
+            "Training checkpoints may come from either source; see source_migration.json.",
+            "",
+        ]
     for group in summary["groups"]:
         stats = group["statistics"]
         values = [

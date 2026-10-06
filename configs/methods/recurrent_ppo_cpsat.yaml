@@ -11,6 +11,7 @@ train:
   batch_size: 256
   n_epochs: 10
   eval_seeds: [1000, 1001, 1002]
+  eval_freq: 30000
   learning_rate: 0.0003
   curriculum: true
   tensorboard: true

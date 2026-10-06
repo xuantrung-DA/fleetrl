@@ -101,3 +101,26 @@ def test_cli_returns_failure_for_unlimited_incomplete_study(monkeypatch):
     )
     assert main(["study", "test"]) == 1
     assert main(["study", "test", "--limit", "1"]) == 0
+
+
+def test_source_migration_requires_exact_record(tmp_path, monkeypatch):
+    import fleetrl.experiments.runner as runner
+
+    study = Study().validate()
+    output = tmp_path / "study"
+    monkeypatch.setattr(runner, "source_tree_hash", lambda: "original")
+    runner._locked_root(output, study)
+
+    monkeypatch.setattr(runner, "source_tree_hash", lambda: "patched")
+    with pytest.raises(ValueError, match="source/config/protocol changed"):
+        runner._locked_root(output, study)
+
+    (output / "source_migration.json").write_text(
+        json.dumps({"from_source_hash": "original", "to_source_hash": "patched"})
+    )
+    runner._locked_root(output, study)
+    assert json.loads((output / "identity.json").read_text())["source_hash"] == "original"
+
+    monkeypatch.setattr(runner, "source_tree_hash", lambda: "another")
+    with pytest.raises(ValueError, match="source/config/protocol changed"):
+        runner._locked_root(output, study)
