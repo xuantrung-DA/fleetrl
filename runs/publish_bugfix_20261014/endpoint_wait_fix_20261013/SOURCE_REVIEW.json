@@ -1,0 +1,28 @@
+{
+  "protected_modules_unchanged": {
+    "optimizer.py": true,
+    "env.py": true,
+    "observations.py": true,
+    "metrics.py": true,
+    "energy.py": true,
+    "config.py": true,
+    "types.py": true
+  },
+  "changed_existing_simulator_functions": [
+    "_move",
+    "_recover_deadlock"
+  ],
+  "new_simulator_functions": [
+    "_endpoint_wait_cycle"
+  ],
+  "unchanged_guards": [
+    "_route_wait",
+    "_task_required_energy",
+    "_valid_charge",
+    "submit_plan",
+    "_audit_positions",
+    "_energy_emergency"
+  ],
+  "observation_reward_unchanged": true,
+  "train_or_tune": false
+}

@@ -1,0 +1,11 @@
+{
+  "source_hash": "ed607d948dea6e37bf2718c469e603476811b2eec8819f0c1dca4837beda6242",
+  "targeted_tests_passed": 82,
+  "full_tests_passed": 202,
+  "full_test_wall_s": 206.43,
+  "ruff_check": "pass",
+  "ruff_format_files": 79,
+  "checksums_verified": 192,
+  "diff_check": "pass",
+  "train_or_tune": false
+}

@@ -1,0 +1,7 @@
+{
+  "issue": "runs/readiness_nonlearning_fresh_20261013/pilot/S6_replay1200_fixed_cpsat_3005/issue.json",
+  "job": "S6_replay1200_fixed_cpsat_3005",
+  "failures": [
+    "completion_lt_50_percent_non_extreme"
+  ]
+}

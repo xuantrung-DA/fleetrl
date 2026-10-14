@@ -1,0 +1,116 @@
+{
+  "source_hash": "0dfa553da4ee08622977f67fb60b54ece07588056f98dcfbb1fcaca4882a187f",
+  "clean_import": "src/fleetrl/__init__.py",
+  "dependency_versions": {
+    "numpy": "1.26.4",
+    "torch": "2.6.0",
+    "gymnasium": "1.2.3",
+    "stable-baselines3": "2.7.0",
+    "ortools": "9.14.6206",
+    "pytest": "9.1.1"
+  },
+  "models": {
+    "heuristic": true,
+    "mappo_dispatch": true,
+    "dqn_cpsat": true
+  },
+  "record_only_smoke": [
+    {
+      "method": "heuristic",
+      "status": "complete",
+      "duration_s": 5,
+      "frames": 11,
+      "fallback_reasons": [
+        null
+      ]
+    },
+    {
+      "method": "mappo_dispatch",
+      "status": "complete",
+      "duration_s": 5,
+      "frames": 11,
+      "fallback_reasons": [
+        null
+      ]
+    },
+    {
+      "method": "dqn_cpsat",
+      "status": "complete",
+      "duration_s": 5,
+      "frames": 11,
+      "fallback_reasons": [
+        null
+      ]
+    }
+  ],
+  "heuristic_live_duration_s": 5,
+  "http_checks": [
+    {
+      "restart": 0,
+      "start_s": 0,
+      "frames": 120,
+      "end_s": 3600.0
+    },
+    {
+      "restart": 0,
+      "start_s": 1800,
+      "frames": 120,
+      "end_s": 3600.0
+    },
+    {
+      "restart": 0,
+      "start_s": 3599,
+      "frames": 3,
+      "end_s": 3600.0
+    },
+    {
+      "restart": 1,
+      "start_s": 0,
+      "frames": 120,
+      "end_s": 3600.0
+    },
+    {
+      "restart": 1,
+      "start_s": 1800,
+      "frames": 120,
+      "end_s": 3600.0
+    },
+    {
+      "restart": 1,
+      "start_s": 3599,
+      "frames": 3,
+      "end_s": 3600.0
+    }
+  ],
+  "limits": "No training, study rerun or FPS benchmark; full replay is historical",
+  "pytest": {
+    "tests": "101",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "time": "27.609",
+    "deselected": 6
+  },
+  "frontend": {
+    "command": "npm ci; npm run build",
+    "node": "24.12.0",
+    "vite": "7.3.6",
+    "tsc": "passed",
+    "result": "passed",
+    "warning": "Bundle exceeds 500 kB; no FPS guarantee"
+  },
+  "environment": {
+    "os": "Windows",
+    "python": "3.12.14",
+    "venv_system_site_packages": false,
+    "installed_from": "requirements.txt; official PyPI torch 2.6.0 wheel",
+    "torch_wheel_sha256": "7e1448426d0ba3620408218b50aa6ada88aeae34f7a239ba5431f6c8774b1239",
+    "scope": "Different directory on same machine; all source/models/replay inside publication package"
+  },
+  "verified_at": "2026-10-14T06:45:53.107138+00:00",
+  "not_verified": [
+    "Second physical machine",
+    "Browser render/FPS of packaged build",
+    "Full study or long-episode runtime after packaging"
+  ]
+}

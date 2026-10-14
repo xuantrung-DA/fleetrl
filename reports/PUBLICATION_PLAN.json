@@ -1,0 +1,666 @@
+{
+  "branch": "run-and-demo",
+  "verified_remote_head": "95fdcc414b8afcab0894867043c5d3aad5319cc1",
+  "local_only_commits_at_inspection": 0,
+  "commit_order": [
+    "1_fix_runtime",
+    "2_demo_replay",
+    "3_demo_assets",
+    "4_verification",
+    "5_notebook",
+    "6_checksums"
+  ],
+  "dependencies": {
+    "2_demo_replay": [
+      "1_fix_runtime"
+    ],
+    "3_demo_assets": [
+      "2_demo_replay"
+    ],
+    "4_verification": [
+      "1_fix_runtime",
+      "2_demo_replay",
+      "3_demo_assets"
+    ],
+    "5_notebook": [
+      "4_verification"
+    ],
+    "6_checksums": [
+      "1_fix_runtime",
+      "2_demo_replay",
+      "3_demo_assets",
+      "4_verification",
+      "5_notebook"
+    ]
+  },
+  "groups": {
+    "1_fix_runtime": {
+      "files": [
+        {
+          "path": "src/fleetrl/config.py",
+          "bytes": 14852,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/env.py",
+          "bytes": 11111,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/methods/mappo_dispatch.py",
+          "bytes": 13192,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/optimization/milp.py",
+          "bytes": 12481,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/optimizer.py",
+          "bytes": 52094,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/parking.py",
+          "bytes": 3078,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/simulator.py",
+          "bytes": 64727,
+          "force_add": false
+        },
+        {
+          "path": "tests/test_optimizer.py",
+          "bytes": 16308,
+          "force_add": false
+        },
+        {
+          "path": "tests/test_simulator.py",
+          "bytes": 30682,
+          "force_add": false
+        },
+        {
+          "path": "tests/test_stale_fallback.py",
+          "bytes": 3149,
+          "force_add": false
+        }
+      ],
+      "bytes": 221674
+    },
+    "2_demo_replay": {
+      "files": [
+        {
+          "path": "demo3d/web/src/api.ts",
+          "bytes": 1094,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/web/src/main.ts",
+          "bytes": 8726,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/web/src/original-viewer.d.ts",
+          "bytes": 571,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/web/src/original-viewer.js",
+          "bytes": 45058,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/web/src/recorded.ts",
+          "bytes": 3180,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/web/src/types.ts",
+          "bytes": 2233,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/demo3d/recordings.py",
+          "bytes": 8199,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/demo3d/server.py",
+          "bytes": 7413,
+          "force_add": false
+        },
+        {
+          "path": "src/fleetrl/demo3d/session.py",
+          "bytes": 17834,
+          "force_add": false
+        },
+        {
+          "path": "tests/test_demo3d_recordings.py",
+          "bytes": 6059,
+          "force_add": false
+        }
+      ],
+      "bytes": 100367
+    },
+    "3_demo_assets": {
+      "files": [
+        {
+          "path": "README.md",
+          "bytes": 1613,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/README.md",
+          "bytes": 5772,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/README.md",
+          "bytes": 458,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/dqn_cpsat/seed11/best_model.zip",
+          "bytes": 4085016,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/dqn_cpsat/seed11/best_model.zip.json",
+          "bytes": 10264,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/frozen_checkpoint_dqn_cpsat_11.json",
+          "bytes": 128,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/frozen_checkpoint_mappo_dispatch_11.json",
+          "bytes": 133,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/mappo_dispatch/seed11/best_model.zip",
+          "bytes": 478676,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/mappo_dispatch/seed11/best_model.zip.json",
+          "bytes": 10272,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/models/provenance.json",
+          "bytes": 1198,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/samples/mappo_s4_1001_full/README.md",
+          "bytes": 611,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/samples/mappo_s4_1001_full/provenance.json",
+          "bytes": 645,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/samples/mappo_s4_1001_full/recording.json",
+          "bytes": 281,
+          "force_add": false
+        },
+        {
+          "path": "demo3d/samples/mappo_s4_1001_full/replay.jsonl.gz",
+          "bytes": 31888381,
+          "force_add": false
+        }
+      ],
+      "bytes": 36483448
+    },
+    "4_verification": {
+      "files": [
+        {
+          "path": "reports/PUBLICATION_PLAN.json",
+          "bytes": 20446,
+          "force_add": false
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/PORTABILITY.md",
+          "bytes": 3177,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/README.md",
+          "bytes": 1982,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/charging_access_20261013/CHARGING_FIX.md",
+          "bytes": 4327,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/charging_access_20261013/QUALITY_FINAL.json",
+          "bytes": 1079,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/charging_access_20261013/SOURCE_REVIEW.json",
+          "bytes": 725,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/demo3d_recorded_validation/REPORT.md",
+          "bytes": 2482,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/demo3d_recorded_validation/api_evidence.json",
+          "bytes": 2488,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/demo3d_recorded_validation/pytest_final.xml",
+          "bytes": 1698,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/DIAGNOSIS_CHARGE_HANDOFF.md",
+          "bytes": 2346,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/DIAGNOSIS_DISPATCH.md",
+          "bytes": 9020,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/REPORT.md",
+          "bytes": 12396,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/ablation_vs_parking_fix.csv",
+          "bytes": 380469,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/acceptance.json",
+          "bytes": 6949,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/aggregate.csv",
+          "bytes": 61424,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/completion_audit.json",
+          "bytes": 651,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/default_validation/aggregate.csv",
+          "bytes": 10252,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/default_validation/paired_vs_baseline.csv",
+          "bytes": 34103,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/paired_vs_baseline.csv",
+          "bytes": 388780,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/dispatch_regression_20261013/protocol.json",
+          "bytes": 1133,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/BEFORE_AFTER_CI95.json",
+          "bytes": 1748,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/FIX_REPORT.md",
+          "bytes": 2559,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/QUALITY_FINAL.json",
+          "bytes": 307,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/SOURCE_REVIEW.json",
+          "bytes": 589,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/VALIDATION_SUMMARY.json",
+          "bytes": 325,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/before_after_S4_validation.csv",
+          "bytes": 11530,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/controlled_validation1000/map.json",
+          "bytes": 789,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/controlled_validation1000/plan.json",
+          "bytes": 4545,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/controlled_validation1000/result.json",
+          "bytes": 10335,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/pytest_full.xml",
+          "bytes": 26035,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_validation_20261013/controlled_validation1000/map.json",
+          "bytes": 789,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_validation_20261013/controlled_validation1000/plan.json",
+          "bytes": 4552,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/endpoint_wait_validation_20261013/controlled_validation1000/result.json",
+          "bytes": 8374,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/idle_parking_20261013/DIAGNOSIS_BEFORE.md",
+          "bytes": 4170,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/idle_parking_20261013/REPORT.md",
+          "bytes": 14004,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/idle_parking_20261013/acceptance.json",
+          "bytes": 6804,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/idle_parking_20261013/comparison_controlled.csv",
+          "bytes": 6827,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/idle_parking_20261013/comparison_default.csv",
+          "bytes": 6831,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/idle_parking_20261013/walltime_variation.json",
+          "bytes": 321,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/manifest.json",
+          "bytes": 29870,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/paused_candidate_20261013/FIX_VERIFICATION.json",
+          "bytes": 23026,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/paused_candidate_20261013/QUALITY_FINAL.json",
+          "bytes": 307,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/paused_candidate_20261013/REPORT.md",
+          "bytes": 874,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/portability.json",
+          "bytes": 2598,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/COMPLETION_AUDIT.json",
+          "bytes": 1343,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/FINAL_REPORT.md",
+          "bytes": 11032,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/PHASE_COMPLETE.json",
+          "bytes": 283,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/S6_CALENDAR_WITNESS.json",
+          "bytes": 4258,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/STOP_REQUIRED_first_completion.json",
+          "bytes": 214,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/nonlearning_aggregate.csv",
+          "bytes": 22723,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/nonlearning_metrics.csv",
+          "bytes": 156768,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/nonlearning_paired_CI95.csv",
+          "bytes": 47277,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/traffic_light.csv",
+          "bytes": 2421,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/stale_fallback_20261013/FIX_VERIFICATION.json",
+          "bytes": 1223,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/stale_fallback_20261013/QUALITY_FINAL.json",
+          "bytes": 308,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/stale_fallback_20261013/REPORT.md",
+          "bytes": 1618,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/study14_current_source_testonly/README.md",
+          "bytes": 1668,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/study14_current_source_testonly/episodes.csv",
+          "bytes": 450188,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/study14_current_source_testonly/identity.json",
+          "bytes": 1939,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/study14_current_source_testonly/run.py",
+          "bytes": 8174,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/study14_current_source_testonly/status.json",
+          "bytes": 61,
+          "force_add": true
+        },
+        {
+          "path": "runs/publish_bugfix_20261014/study14_current_source_testonly/summary.json",
+          "bytes": 2482827,
+          "force_add": true
+        },
+        {
+          "path": "scripts/diagnose_dispatch_regression.py",
+          "bytes": 10139,
+          "force_add": false
+        },
+        {
+          "path": "scripts/diagnose_idle_motion.py",
+          "bytes": 12762,
+          "force_add": false
+        },
+        {
+          "path": "scripts/dispatch_audit/__init__.py",
+          "bytes": 74,
+          "force_add": false
+        },
+        {
+          "path": "scripts/dispatch_audit/analysis.py",
+          "bytes": 4976,
+          "force_add": false
+        },
+        {
+          "path": "scripts/dispatch_audit/snapshots.py",
+          "bytes": 4929,
+          "force_add": false
+        },
+        {
+          "path": "scripts/dispatch_audit/trace.py",
+          "bytes": 13466,
+          "force_add": false
+        },
+        {
+          "path": "scripts/prepare_publication.py",
+          "bytes": 10919,
+          "force_add": false
+        },
+        {
+          "path": "scripts/replay_dispatch_eligibility.py",
+          "bytes": 7839,
+          "force_add": false
+        },
+        {
+          "path": "scripts/verify_publication.py",
+          "bytes": 5809,
+          "force_add": false
+        }
+      ],
+      "bytes": 4379274
+    },
+    "5_notebook": {
+      "files": [
+        {
+          "path": "ABOUT.md",
+          "bytes": 91522,
+          "force_add": false
+        },
+        {
+          "path": "notebooks/fleetrl_before_after_fixes_vi.ipynb",
+          "bytes": 1020213,
+          "force_add": false
+        },
+        {
+          "path": "scripts/build_fix_comparison_notebook.py",
+          "bytes": 40204,
+          "force_add": false
+        }
+      ],
+      "bytes": 1151939
+    },
+    "6_checksums": {
+      "files": [
+        {
+          "path": "SHA256SUMS.txt",
+          "bytes": 29133,
+          "force_add": false
+        },
+        {
+          "path": "scripts/study_cleanup.py",
+          "bytes": 4627,
+          "force_add": false
+        },
+        {
+          "path": "scripts/study_status.py",
+          "bytes": 7441,
+          "force_add": false
+        },
+        {
+          "path": "scripts/update_checksums.py",
+          "bytes": 2106,
+          "force_add": false
+        }
+      ],
+      "bytes": 43307
+    }
+  },
+  "ignored": [
+    {
+      "path": "runs/study14/**",
+      "reason": "Full study, remaining checkpoints, replay buffers, logs and SQLite are not selected"
+    },
+    {
+      "path": "runs/demo3d/**",
+      "reason": "Raw replay preserved locally; exactly one gzip copy selected under demo3d/samples"
+    },
+    {
+      "path": "runs/*20261013/**",
+      "reason": "Original evidence preserved; only selected clean copies under runs/publish_bugfix_20261014"
+    },
+    {
+      "path": "runs/study14_current_source_testonly/**",
+      "reason": "Raw 270 episode artifacts omitted; selected clean protocol, identity, metrics and summary exported"
+    },
+    {
+      "path": "runs/publish_validation_20261014/**",
+      "reason": "Clean test sandbox: venv, downloaded wheels, node_modules, dist, cache and smoke outputs omitted"
+    },
+    {
+      "path": ".venv/, demo3d/web/node_modules/, demo3d/web/dist/",
+      "reason": "Install/build locally, do not publish generated dependencies"
+    }
+  ],
+  "notes": [
+    "Each path is an explicit allowlist; Git add -f only for these selected runs/publish_bugfix_20261014 files.",
+    "Complete replay means horizon completed, not 100 percent of tasks finished.",
+    "Notebook includes 12 images; full regeneration requires 273 historical artifacts outside this selected package.",
+    "Models preserve payload; only selected exported metadata/locks normalize paths. Historical source hashes stay historical.",
+    "Final checksum commit closes the aggregate manifest; during earlier commits manifest still reflects the previous publication state.",
+    "No Git writes performed by assistant.",
+    "Existing tracked runs/study14/episodes.jsonl and summary.json already contain personal D-drive paths from earlier published commits; they are unchanged and not newly staged. This package sanitizes selected new exports, not Git history.",
+    "Sixteen historical study report files already tracked by Git remain part of a clone. Clean demo smoke did not need them; they were then copied unchanged to verify all 274 publication checksums. No historical raw model/replay was used."
+  ],
+  "total_files": 112,
+  "total_bytes": 42380009
+}

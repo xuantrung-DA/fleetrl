@@ -1,0 +1,123 @@
+{
+  "recordings": [
+    {
+      "id": "ff36d964ed61",
+      "method": "mappo_dispatch",
+      "scenario": "S2",
+      "status": "legacy",
+      "bytes": 374325
+    },
+    {
+      "id": "f7280b53b701",
+      "method": "heuristic",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 6935197
+    },
+    {
+      "id": "b6375b866909",
+      "method": "mappo_dispatch",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 7285305
+    },
+    {
+      "id": "b170dc088321",
+      "method": "mappo_dispatch",
+      "scenario": "S2",
+      "status": "legacy",
+      "bytes": 2472070
+    },
+    {
+      "id": "a5bf566666db",
+      "method": "heuristic",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 9275654
+    },
+    {
+      "id": "a326a3a137d5",
+      "method": "mappo_dispatch",
+      "scenario": "S2",
+      "status": "legacy",
+      "bytes": 4827764
+    },
+    {
+      "id": "9f9e9ca417fe",
+      "method": "mappo_dispatch",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 52077
+    },
+    {
+      "id": "913f0b897301",
+      "method": "heuristic",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 40721918
+    },
+    {
+      "id": "90be6072633c",
+      "method": "mappo_dispatch",
+      "scenario": "S2",
+      "status": "legacy",
+      "bytes": 33461082
+    },
+    {
+      "id": "64b52d073cb5",
+      "method": "mappo_dispatch",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 277013156
+    },
+    {
+      "id": "1b4843b7b701",
+      "method": "dqn_cpsat",
+      "scenario": "S4",
+      "status": "legacy",
+      "bytes": 27421994
+    }
+  ],
+  "windows": [
+    {
+      "requested_s": 0,
+      "frames": 120,
+      "first_s": 0.0,
+      "last_s": 59.5,
+      "total_frames": 7201,
+      "end_s": 3600.0,
+      "bytes": 2516077,
+      "response_ms": 147.04
+    },
+    {
+      "requested_s": 1200,
+      "frames": 120,
+      "first_s": 1200.0,
+      "last_s": 1259.5,
+      "total_frames": 7201,
+      "end_s": 3600.0,
+      "bytes": 3798527,
+      "response_ms": 166.5
+    },
+    {
+      "requested_s": 3599,
+      "frames": 3,
+      "first_s": 3599.0,
+      "last_s": 3600.0,
+      "total_frames": 7201,
+      "end_s": 3600.0,
+      "bytes": 171259,
+      "response_ms": 19.75
+    },
+    {
+      "requested_s": 3600,
+      "frames": 1,
+      "first_s": 3600.0,
+      "last_s": 3600.0,
+      "total_frames": 7201,
+      "end_s": 3600.0,
+      "bytes": 58846,
+      "response_ms": 21.45
+    }
+  ]
+}

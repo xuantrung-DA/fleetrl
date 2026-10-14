@@ -1,0 +1,82 @@
+[
+  {
+    "method": "fixed_cpsat",
+    "metric": "completed",
+    "tapes": 20,
+    "mean_delta": -0.4,
+    "ci95_low": -0.9,
+    "ci95_high": 0.0,
+    "contains_zero": true,
+    "superiority_claim": false
+  },
+  {
+    "method": "fixed_cpsat",
+    "metric": "pending",
+    "tapes": 20,
+    "mean_delta": 0.4,
+    "ci95_low": 0.0,
+    "ci95_high": 0.95,
+    "contains_zero": true,
+    "superiority_claim": false
+  },
+  {
+    "method": "fixed_cpsat",
+    "metric": "completion_rate",
+    "tapes": 20,
+    "mean_delta": -0.009779367918902803,
+    "ci95_low": -0.022927847346451997,
+    "ci95_high": 0.0,
+    "contains_zero": true,
+    "superiority_claim": false
+  },
+  {
+    "method": "fixed_cpsat",
+    "metric": "total_lateness_s",
+    "tapes": 20,
+    "mean_delta": 186.07142856135007,
+    "ci95_low": 6.069284973771383,
+    "ci95_high": 401.9480640413547,
+    "contains_zero": false,
+    "superiority_claim": false
+  },
+  {
+    "method": "heuristic",
+    "metric": "completed",
+    "tapes": 20,
+    "mean_delta": 0.0,
+    "ci95_low": 0.0,
+    "ci95_high": 0.0,
+    "contains_zero": true,
+    "superiority_claim": false
+  },
+  {
+    "method": "heuristic",
+    "metric": "pending",
+    "tapes": 20,
+    "mean_delta": 0.0,
+    "ci95_low": 0.0,
+    "ci95_high": 0.0,
+    "contains_zero": true,
+    "superiority_claim": false
+  },
+  {
+    "method": "heuristic",
+    "metric": "completion_rate",
+    "tapes": 20,
+    "mean_delta": 0.0,
+    "ci95_low": 0.0,
+    "ci95_high": 0.0,
+    "contains_zero": true,
+    "superiority_claim": false
+  },
+  {
+    "method": "heuristic",
+    "metric": "total_lateness_s",
+    "tapes": 20,
+    "mean_delta": 0.0,
+    "ci95_low": 0.0,
+    "ci95_high": 0.0,
+    "contains_zero": true,
+    "superiority_claim": false
+  }
+]

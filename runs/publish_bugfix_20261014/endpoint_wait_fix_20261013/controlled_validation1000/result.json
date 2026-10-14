@@ -1,0 +1,438 @@
+{
+  "metrics": {
+    "consumed_wh": 3.7102499999998257,
+    "grid_wh": 0.0,
+    "completed": 2,
+    "collisions": 0.0,
+    "edge_conflicts": 0.0,
+    "energy_emergencies": 0.0,
+    "reserve_violations": 0.0,
+    "deadlocks": 2.0,
+    "deadlocks_resolved": 2.0,
+    "deadlocks_unresolved": 0.0,
+    "distance_m": 16.0,
+    "empty_distance_m": 5.0,
+    "loaded_distance_m": 11.0,
+    "charge_sessions": 0.0,
+    "rejected_decisions": 0.0,
+    "blocked_incidents_rejected": 0.0,
+    "backlog_integral_s": 171.0,
+    "late_integral_s": 0.0,
+    "charged_battery_wh": 0.0,
+    "robot_kind_L_consumed_wh": 0.0,
+    "robot_kind_L_grid_wh": 0.0,
+    "robot_kind_L_distance_m": 0.0,
+    "robot_kind_L_empty_distance_m": 0.0,
+    "robot_kind_L_loaded_distance_m": 0.0,
+    "robot_kind_H_consumed_wh": 0.0,
+    "robot_kind_H_grid_wh": 0.0,
+    "robot_kind_H_distance_m": 0.0,
+    "robot_kind_H_empty_distance_m": 0.0,
+    "robot_kind_H_loaded_distance_m": 0.0,
+    "robot_kind_M_consumed_wh": 3.7102499999998257,
+    "robot_kind_M_grid_wh": 0.0,
+    "robot_kind_M_distance_m": 16.0,
+    "robot_kind_M_empty_distance_m": 5.0,
+    "robot_kind_M_loaded_distance_m": 11.0,
+    "sim_time_s": 420.0,
+    "arrived": 2,
+    "pending": 0,
+    "throughput_per_hour": 17.142857142857142,
+    "completion_rate": 1.0,
+    "total_lateness_s": 0.0,
+    "deadline_due": 0,
+    "deadline_violated": 0,
+    "deadline_violation_rate": null,
+    "pending_not_yet_due": 0,
+    "mean_wait_s": 32.5,
+    "wait_censored": 0,
+    "mean_system_time_s": 85.5,
+    "blocked_tasks": 0,
+    "energy_per_completed_wh": 1.8551249999999129,
+    "initial_battery_wh": 580,
+    "final_battery_wh": 576.2897500000025,
+    "mean_final_soc": 0.9604829166666708,
+    "mean_charge_wait_s": null,
+    "charging_requests": 0,
+    "charge_wait_censored": 0,
+    "charge_cancelled": 0,
+    "decision_count": 0,
+    "decision_p50_ms": null,
+    "decision_p95_ms": null,
+    "decision_max_ms": null,
+    "fallback_rate": null,
+    "weight_5_arrived": 2,
+    "weight_5_completed": 2,
+    "weight_15_arrived": 0,
+    "weight_15_completed": 0,
+    "weight_40_arrived": 0,
+    "weight_40_completed": 0,
+    "weight_80_arrived": 0,
+    "weight_80_completed": 0,
+    "priority_1_arrived": 2,
+    "priority_1_completed": 2,
+    "priority_3_arrived": 0,
+    "priority_3_completed": 0,
+    "metrics_schema_version": 2,
+    "metric_groups": [
+      "M01",
+      "M02",
+      "M03",
+      "M04",
+      "M05",
+      "M06",
+      "M07",
+      "M08",
+      "M09",
+      "M10",
+      "M11",
+      "M12",
+      "M13",
+      "M14",
+      "M15",
+      "M16"
+    ],
+    "pending_rate": 0.0,
+    "empty_distance_ratio": 0.3125,
+    "battery_balance_error_wh": -2.3874235921539366e-12,
+    "port_usage": {
+      "0": {
+        "charging_s": 0.0,
+        "occupied_s": 0.0,
+        "charging_utilization": 0.0,
+        "occupied_utilization": 0.0
+      }
+    },
+    "charging_time_s": 0.0,
+    "port_occupied_time_s": 0.0,
+    "charger_utilization": 0.0,
+    "port_occupied_utilization": 0.0,
+    "invariant_incidents": {},
+    "lost_tasks": 0,
+    "payload_violations": 0,
+    "duplicate_assignments": 0,
+    "task_ownership_violations": 0,
+    "safety_incidents": 0.0,
+    "deadlock_incident_count": 2,
+    "deadlock_confirmed_resolved": 2,
+    "deadlock_pending": 0,
+    "deadlock_recovery_rate": 1.0,
+    "deadlock_first_progress_s": {
+      "n": 2,
+      "mean": 32.0,
+      "p50": 32.0,
+      "p95": 32.45,
+      "max": 32.5
+    },
+    "deadlock_recovery_s": {
+      "n": 2,
+      "mean": 55.0,
+      "p50": 55.0,
+      "p95": 61.75,
+      "max": 62.5
+    },
+    "deadlock_duration_censored_s": {
+      "n": 2,
+      "mean": 55.0,
+      "p50": 55.0,
+      "p95": 61.75,
+      "max": 62.5
+    },
+    "deadlock_incidents": [
+      {
+        "incident_id": 1,
+        "robot_id": 1,
+        "detected_s": 30.5,
+        "first_progress_s": 62.0,
+        "last_progress_s": 68.0,
+        "progress_since_s": 62.0,
+        "resolved_s": 78.0,
+        "resolution": "operation_completed"
+      },
+      {
+        "incident_id": 2,
+        "robot_id": 0,
+        "detected_s": 30.5,
+        "first_progress_s": 63.0,
+        "last_progress_s": 83.0,
+        "progress_since_s": 63.0,
+        "resolved_s": 93.0,
+        "resolution": "operation_completed"
+      }
+    ],
+    "solver_calls": 0,
+    "solver_dispatches": 0,
+    "solver_status_counts": {},
+    "solver_nonoptimal_rate": null,
+    "solver_confirmed_timeouts": 0,
+    "solver_timeout_unknown_calls": 0,
+    "solver_timeout_rate": null,
+    "solver_known_timeout_rate": null,
+    "fallback_reasons": {},
+    "proposal_rejection_reasons": {},
+    "proposal_rejection_rate": null,
+    "arbitration_rejection_count": 0,
+    "online_budget_exceeded_rate": null,
+    "latency_components_ms": {
+      "preparation_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "policy_inference_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "solver_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "commit_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "total_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "advance_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      }
+    },
+    "training_resources": null,
+    "statistical_stability": null,
+    "generalization": null,
+    "weight_5_completion_rate": 1.0,
+    "weight_5_lateness_s": 0,
+    "weight_5_deadline_violation_rate": null,
+    "weight_15_completion_rate": null,
+    "weight_15_lateness_s": 0,
+    "weight_15_deadline_violation_rate": null,
+    "weight_40_completion_rate": null,
+    "weight_40_lateness_s": 0,
+    "weight_40_deadline_violation_rate": null,
+    "weight_80_completion_rate": null,
+    "weight_80_lateness_s": 0,
+    "weight_80_deadline_violation_rate": null,
+    "priority_1_completion_rate": 1.0,
+    "priority_1_lateness_s": 0,
+    "priority_1_deadline_violation_rate": null,
+    "priority_3_completion_rate": null,
+    "priority_3_lateness_s": 0,
+    "priority_3_deadline_violation_rate": null
+  },
+  "events": [
+    {
+      "event_id": 1,
+      "time_s": 30.5,
+      "kind": "deadlock_recovery_attempt",
+      "robot_id": 1,
+      "attempt": 1,
+      "goal": [
+        2,
+        3
+      ]
+    },
+    {
+      "event_id": 2,
+      "time_s": 30.5,
+      "kind": "deadlock_recovery_attempt",
+      "robot_id": 0,
+      "attempt": 1,
+      "goal": [
+        6,
+        3
+      ]
+    },
+    {
+      "event_id": 3,
+      "time_s": 60.5,
+      "kind": "deadlock_recovery_attempt",
+      "robot_id": 1,
+      "attempt": 2,
+      "goal": [
+        5,
+        1
+      ]
+    },
+    {
+      "event_id": 4,
+      "time_s": 62.0,
+      "kind": "deadlock_recovered",
+      "robot_id": 1
+    },
+    {
+      "event_id": 5,
+      "time_s": 63.0,
+      "kind": "deadlock_recovered",
+      "robot_id": 0
+    },
+    {
+      "event_id": 6,
+      "time_s": 65.0,
+      "kind": "pickup_started",
+      "robot_id": 0,
+      "task_id": 0
+    },
+    {
+      "event_id": 7,
+      "time_s": 75.0,
+      "kind": "pickup_finished",
+      "robot_id": 0,
+      "task_id": 0
+    },
+    {
+      "event_id": 8,
+      "time_s": 78.0,
+      "kind": "task_completed",
+      "robot_id": 1,
+      "task_id": 1
+    },
+    {
+      "event_id": 9,
+      "time_s": 78.0,
+      "kind": "deadlock_resolution_confirmed",
+      "incident_id": 1,
+      "robot_id": 1,
+      "reason": "operation_completed"
+    },
+    {
+      "event_id": 10,
+      "time_s": 78.0,
+      "kind": "endpoint_blocker_yield",
+      "robot_id": 1,
+      "for_robot_id": 0,
+      "bay": [
+        2,
+        1
+      ]
+    },
+    {
+      "event_id": 11,
+      "time_s": 93.0,
+      "kind": "task_completed",
+      "robot_id": 0,
+      "task_id": 0
+    },
+    {
+      "event_id": 12,
+      "time_s": 93.0,
+      "kind": "deadlock_resolution_confirmed",
+      "incident_id": 2,
+      "robot_id": 0,
+      "reason": "operation_completed"
+    }
+  ],
+  "deadlock_incidents": [
+    {
+      "incident_id": 1,
+      "robot_id": 1,
+      "detected_s": 30.5,
+      "first_progress_s": 62.0,
+      "last_progress_s": 68.0,
+      "progress_since_s": 62.0,
+      "resolved_s": 78.0,
+      "resolution": "operation_completed"
+    },
+    {
+      "incident_id": 2,
+      "robot_id": 0,
+      "detected_s": 30.5,
+      "first_progress_s": 63.0,
+      "last_progress_s": 83.0,
+      "progress_since_s": 63.0,
+      "resolved_s": 93.0,
+      "resolution": "operation_completed"
+    }
+  ],
+  "invariant_incidents": [],
+  "final_robots": [
+    {
+      "id": 0,
+      "kind": "M",
+      "position": [
+        2,
+        3
+      ],
+      "capacity_wh": 300,
+      "battery_wh": 288.20400000000126,
+      "speed_mps": 1,
+      "payload_capacity_kg": 50,
+      "movement_wh_m": 0.055,
+      "status": "idle",
+      "task_id": null,
+      "load_kg": 0.0,
+      "port_id": null,
+      "target_soc": null,
+      "paused_until_s": 0.0,
+      "observed_at_s": 420.0,
+      "target_position": null,
+      "path": [],
+      "move_to": null,
+      "move_remaining_s": 0.0,
+      "service_remaining_s": 0.0,
+      "blocked_since_s": null,
+      "metadata": {
+        "route_wait_s": 65.5,
+        "path_goal": [
+          2,
+          3
+        ],
+        "last_move_s": 82.0
+      }
+    },
+    {
+      "id": 1,
+      "kind": "M",
+      "position": [
+        2,
+        1
+      ],
+      "capacity_wh": 300,
+      "battery_wh": 288.08575000000127,
+      "speed_mps": 1,
+      "payload_capacity_kg": 50,
+      "movement_wh_m": 0.055,
+      "status": "idle",
+      "task_id": null,
+      "load_kg": 0.0,
+      "port_id": null,
+      "target_soc": null,
+      "paused_until_s": 0.0,
+      "observed_at_s": 420.0,
+      "target_position": null,
+      "path": [],
+      "move_to": null,
+      "move_remaining_s": 0.0,
+      "service_remaining_s": 0.0,
+      "blocked_since_s": null,
+      "metadata": {
+        "route_wait_s": 60.5,
+        "path_goal": [
+          2,
+          1
+        ],
+        "last_move_s": 79.0,
+        "parking_changed_at_s": 80.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "same_config": true,
+  "source_hash": "744de7e00397e055a71096f0766177e357b216cbcc7740fe86ca6f9a0ea40a74",
+  "tape_hash": "613d7fe56751851dda4fad120602f3366bf22a411fac9b1f3174083cfb1411a0",
+  "first_different_time_s": 0,
+  "solver_status": "FEASIBLE",
+  "pending_readiness_probe": 3,
+  "pending_final_comparison": 2
+}

@@ -1,0 +1,243 @@
+{
+  "source_hash": "872ddf9c1be679ff602a776a4d97d19f7ca4e5e656aa061a40711736ebb0cff0",
+  "checkpoint_sha256": "7783db9387c017fb24a2edf54b2fc8212746733de5c3febe5a0d8e6106ec69bb",
+  "protocol": {
+    "max_mean_pending_delta_tasks": 0.5,
+    "min_mean_completion_rate_delta": -0.01,
+    "safety_incidents": 0,
+    "lost_tasks": 0,
+    "seed_count_per_group": 5,
+    "noise_note": "Thresholds declared before the multi-seed current/ablation runs: at most 0.5 task per episode and 1 percentage point completion. Report sample SD and paired intervals; do not treat lack of significance as proof."
+  },
+  "controlled": [
+    {
+      "scenario": "S2",
+      "method": "fixed_cpsat",
+      "n": 5,
+      "pending_delta": -1.4,
+      "completion_delta": 0.04067276352819042,
+      "pending_paired_sd": 3.286335345030997,
+      "completion_paired_sd": 0.0836468397664718,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S2",
+      "method": "heuristic",
+      "n": 5,
+      "pending_delta": -0.6,
+      "completion_delta": 0.01654373078082665,
+      "pending_paired_sd": 2.701851217221259,
+      "completion_paired_sd": 0.07186549114700938,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S2",
+      "method": "mappo_dispatch",
+      "n": 5,
+      "pending_delta": -0.2,
+      "completion_delta": 0.005882447742912844,
+      "pending_paired_sd": 0.8366600265340756,
+      "completion_paired_sd": 0.02095077153258411,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S4",
+      "method": "fixed_cpsat",
+      "n": 5,
+      "pending_delta": -0.2,
+      "completion_delta": 0.005616566793037392,
+      "pending_paired_sd": 3.3466401061363023,
+      "completion_paired_sd": 0.08645325289384087,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S4",
+      "method": "heuristic",
+      "n": 5,
+      "pending_delta": 0,
+      "completion_delta": 0.0006837606837607035,
+      "pending_paired_sd": 0.7071067811865476,
+      "completion_paired_sd": 0.016948095121976647,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S4",
+      "method": "mappo_dispatch",
+      "n": 5,
+      "pending_delta": 0.2,
+      "completion_delta": -0.0044444444444444505,
+      "pending_paired_sd": 0.4472135954999579,
+      "completion_paired_sd": 0.00993807989999908,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S6",
+      "method": "fixed_cpsat",
+      "n": 5,
+      "pending_delta": -5.4,
+      "completion_delta": 0.13128775834658188,
+      "pending_paired_sd": 4.929503017546495,
+      "completion_paired_sd": 0.11213616583243198,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S6",
+      "method": "heuristic",
+      "n": 5,
+      "pending_delta": 0.2,
+      "completion_delta": -0.0051282051282051325,
+      "pending_paired_sd": 0.4472135954999579,
+      "completion_paired_sd": 0.0114670152692297,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S6",
+      "method": "mappo_dispatch",
+      "n": 5,
+      "pending_delta": -0.2,
+      "completion_delta": 0.0037606837606837694,
+      "pending_paired_sd": 1.0954451150103321,
+      "completion_paired_sd": 0.02530838362163653,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    }
+  ],
+  "default": [
+    {
+      "scenario": "S2",
+      "method": "fixed_cpsat",
+      "n": 5,
+      "pending_delta": -2,
+      "completion_delta": 0.050405419625665845,
+      "pending_paired_sd": 2.7386127875258306,
+      "completion_paired_sd": 0.07170709964502334,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S2",
+      "method": "heuristic",
+      "n": 5,
+      "pending_delta": -0.6,
+      "completion_delta": 0.01654373078082665,
+      "pending_paired_sd": 2.701851217221259,
+      "completion_paired_sd": 0.07186549114700938,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S2",
+      "method": "mappo_dispatch",
+      "n": 5,
+      "pending_delta": -0.2,
+      "completion_delta": 0.005882447742912844,
+      "pending_paired_sd": 0.8366600265340756,
+      "completion_paired_sd": 0.02095077153258411,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S4",
+      "method": "fixed_cpsat",
+      "n": 5,
+      "pending_delta": 0.2,
+      "completion_delta": -0.0031473102061337467,
+      "pending_paired_sd": 2.8635642126552705,
+      "completion_paired_sd": 0.06934723101560544,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S4",
+      "method": "heuristic",
+      "n": 5,
+      "pending_delta": 0,
+      "completion_delta": 0.0006837606837607035,
+      "pending_paired_sd": 0.7071067811865476,
+      "completion_paired_sd": 0.016948095121976647,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S4",
+      "method": "mappo_dispatch",
+      "n": 5,
+      "pending_delta": 0.2,
+      "completion_delta": -0.0044444444444444505,
+      "pending_paired_sd": 0.4472135954999579,
+      "completion_paired_sd": 0.00993807989999908,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S6",
+      "method": "fixed_cpsat",
+      "n": 5,
+      "pending_delta": -0.6,
+      "completion_delta": 0.005401057165763024,
+      "pending_paired_sd": 6.618156843109719,
+      "completion_paired_sd": 0.15814434829450424,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S6",
+      "method": "heuristic",
+      "n": 5,
+      "pending_delta": 0.2,
+      "completion_delta": -0.0051282051282051325,
+      "pending_paired_sd": 0.4472135954999579,
+      "completion_paired_sd": 0.0114670152692297,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    },
+    {
+      "scenario": "S6",
+      "method": "mappo_dispatch",
+      "n": 5,
+      "pending_delta": -0.2,
+      "completion_delta": 0.0037606837606837694,
+      "pending_paired_sd": 1.0954451150103321,
+      "completion_paired_sd": 0.02530838362163653,
+      "safety_no_increase": true,
+      "lost_zero": true,
+      "passed": true
+    }
+  ],
+  "pytest": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "193",
+    "time": "189.023",
+    "timestamp": "2026-10-13T18:41:22.262118+07:00",
+    "hostname": "anonymous-host"
+  },
+  "passed": true
+}

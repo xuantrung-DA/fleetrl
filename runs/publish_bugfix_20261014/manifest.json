@@ -1,0 +1,458 @@
+[
+  {
+    "source": "runs/idle_parking_20261013/REPORT.md",
+    "export": "runs/publish_bugfix_20261014/idle_parking_20261013/REPORT.md",
+    "original_sha256": "748700f92ec86efa9fb1d2ab4b96caaa4fab025dd8f663bf9f4e4ddf7bf29263",
+    "export_sha256": "c59a1ad30dcd0af263d1088f1d3297c12bca6f318bfd0aa6c9b73da11e217efd",
+    "bytes": 14004,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/idle_parking_20261013/DIAGNOSIS_BEFORE.md",
+    "export": "runs/publish_bugfix_20261014/idle_parking_20261013/DIAGNOSIS_BEFORE.md",
+    "original_sha256": "e984f2ece74ab88103e1b08cfa095c1edce8281bb2f25360447b854038f1c441",
+    "export_sha256": "e984f2ece74ab88103e1b08cfa095c1edce8281bb2f25360447b854038f1c441",
+    "bytes": 4170,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/idle_parking_20261013/comparison_default.csv",
+    "export": "runs/publish_bugfix_20261014/idle_parking_20261013/comparison_default.csv",
+    "original_sha256": "85494114abcfd02e6b1a089a8e21bc05fb5ae01034b8dffa26c5e47fe89c33fc",
+    "export_sha256": "9e55ffa9e98aa99beeecd0897e18c748c2e28cdcb0598fd67fd93d91598b382c",
+    "bytes": 6831,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/idle_parking_20261013/comparison_controlled.csv",
+    "export": "runs/publish_bugfix_20261014/idle_parking_20261013/comparison_controlled.csv",
+    "original_sha256": "8487d441275ceab73b44bef121ff8ee6848af8133fe6466138d2b806023c8f63",
+    "export_sha256": "f0ca3783e70e1626e46e04df389d9ecc0924a176cded49543e665177845c19bd",
+    "bytes": 6827,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/idle_parking_20261013/acceptance.json",
+    "export": "runs/publish_bugfix_20261014/idle_parking_20261013/acceptance.json",
+    "original_sha256": "91f94db894ed37d8e0a593bf369e195a5635271b81ca97ce6368eae86abdddc0",
+    "export_sha256": "b5a8e36b9a7dee7715fffb3a698e9cf69aac2d59f737d144a4371894af7b6138",
+    "bytes": 6804,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/idle_parking_20261013/walltime_variation.json",
+    "export": "runs/publish_bugfix_20261014/idle_parking_20261013/walltime_variation.json",
+    "original_sha256": "f0b0ffb7bd694a82b9a7c3d925734abb7a103146edd2013246622add34b5b8b5",
+    "export_sha256": "c119f35a30867b0dd95b6d5157038765659b8be7e754654e827da8d9f72b2c49",
+    "bytes": 321,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/REPORT.md",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/REPORT.md",
+    "original_sha256": "b1b7e92313ad88c47d3cae4d2eda09f38901d5d2404305cdd161e8bf08b79b9d",
+    "export_sha256": "7e2cdee60322e8999b3064732d5d62f4350d61b3fcf02965d9e44c8d6a77eeaf",
+    "bytes": 12396,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/DIAGNOSIS_DISPATCH.md",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/DIAGNOSIS_DISPATCH.md",
+    "original_sha256": "0898ae61bc68a3fd7d8d7e7f7a8efc8058d54142ca936f787f3e5cbe8ba4daf7",
+    "export_sha256": "0898ae61bc68a3fd7d8d7e7f7a8efc8058d54142ca936f787f3e5cbe8ba4daf7",
+    "bytes": 9020,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/DIAGNOSIS_CHARGE_HANDOFF.md",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/DIAGNOSIS_CHARGE_HANDOFF.md",
+    "original_sha256": "f41d13c1cec3ff5e47e7645bdf6e247e817e81d274076bd2c58fb39c05ddd01f",
+    "export_sha256": "f41d13c1cec3ff5e47e7645bdf6e247e817e81d274076bd2c58fb39c05ddd01f",
+    "bytes": 2346,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/protocol.json",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/protocol.json",
+    "original_sha256": "3ae71c20354e59f95138f1de97fef95474c4dfb2bdb19ec7df348a2eca6ce787",
+    "export_sha256": "d5d5b33c1cd79d541a22141421599ebd2e66e9bfe2f9477a963c2bf24dfba3f3",
+    "bytes": 1133,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/aggregate.csv",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/aggregate.csv",
+    "original_sha256": "b0e24cf12cd8f8f44e8ca86aab4fa85082ff903bbdc86a8d35a72ef7265dc626",
+    "export_sha256": "e2523270bad54b979e3240bc9e636875dd6d95b3b71e15ddcc3e6836f021ae61",
+    "bytes": 61424,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/paired_vs_baseline.csv",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/paired_vs_baseline.csv",
+    "original_sha256": "8646043b01ce253dcf81c7f8c8204905deb44b9593b50ddef6b2532ba75406e5",
+    "export_sha256": "4b751042da857415a9e3d8afade6b72bb6f7450e2c9f38859fc26051b3cdb8a1",
+    "bytes": 388780,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/ablation_vs_parking_fix.csv",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/ablation_vs_parking_fix.csv",
+    "original_sha256": "000a9ec3abba23f65337224f0c212711c57ac601aded78dd1e38e1645d0ae556",
+    "export_sha256": "18d82b784db06d988ece2be273711291cbc594c55e0b77dac29e6211520de646",
+    "bytes": 380469,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/acceptance.json",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/acceptance.json",
+    "original_sha256": "9ad2328ab37305602042e0d3366146e3f1a3f96a759f1a5dac5fd9d7fa093178",
+    "export_sha256": "889dd4d69d03be00f7b4ded97e30cf737bad7fdc1af86c4c4a564e8652445c16",
+    "bytes": 6949,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/completion_audit.json",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/completion_audit.json",
+    "original_sha256": "54be081df45cd4febf9673bd352a6bbf473ec0b262725f2764ec17e9060a9c0d",
+    "export_sha256": "7d4f26f10b14ae68af58f7e58415703e0a63d80da535f3e586ec616b76431ea3",
+    "bytes": 651,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/default_validation/aggregate.csv",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/default_validation/aggregate.csv",
+    "original_sha256": "f159fdf59f919a38bbcc88993c329e82a0f40325e6b9d6863c546b44d84c7261",
+    "export_sha256": "f58d77af9c3b106120127cecd973d576ad7a1de94f894fbdc7d4be8b1242c0c3",
+    "bytes": 10252,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/dispatch_regression_20261013/default_validation/paired_vs_baseline.csv",
+    "export": "runs/publish_bugfix_20261014/dispatch_regression_20261013/default_validation/paired_vs_baseline.csv",
+    "original_sha256": "a64578e2038fbb9697e0e1b87972e803808563c38ff392e64a1118a15e3682c5",
+    "export_sha256": "db2d215e71b4bca5c95c66fadd86de877888d56b5569349566129258ec38df40",
+    "bytes": 34103,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/charging_access_20261013/CHARGING_FIX.md",
+    "export": "runs/publish_bugfix_20261014/charging_access_20261013/CHARGING_FIX.md",
+    "original_sha256": "17d288f4a241eb9b6e38c4053dc8593da3c8e2f7af331defa72bde16f71e400e",
+    "export_sha256": "d0ca0c3cde0e921469e4e4a70b3de7a462a9358e14df05601f98b527e5cff183",
+    "bytes": 4327,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/charging_access_20261013/QUALITY_FINAL.json",
+    "export": "runs/publish_bugfix_20261014/charging_access_20261013/QUALITY_FINAL.json",
+    "original_sha256": "2e35831078aa9b39a2a3c8c8e9fc8725d41ba30a026d9c9bfc06a1baf1aed7a6",
+    "export_sha256": "ee7e3d724fabcce76e4dc32310ddbba907ec39be136713e5cbd036b881756b99",
+    "bytes": 1079,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/charging_access_20261013/SOURCE_REVIEW.json",
+    "export": "runs/publish_bugfix_20261014/charging_access_20261013/SOURCE_REVIEW.json",
+    "original_sha256": "770567cb988130ceceeb9321c59ba54ed40ce30627a67f2b8360ed85b481e713",
+    "export_sha256": "09d23c1df0b713981c1851e2b521a130247b7eb53f6eb3f3d1d4144b3ea3c4b6",
+    "bytes": 725,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/paused_candidate_20261013/REPORT.md",
+    "export": "runs/publish_bugfix_20261014/paused_candidate_20261013/REPORT.md",
+    "original_sha256": "ec9894248cddaedee606c4d2e1fcac0f4fd8f6aba82dc6b441c9b5bd42cd1e07",
+    "export_sha256": "74ac060aa33b31766c3f134d57ccb040134dee3ef99747e8fad3aead98d85f3f",
+    "bytes": 874,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/paused_candidate_20261013/FIX_VERIFICATION.json",
+    "export": "runs/publish_bugfix_20261014/paused_candidate_20261013/FIX_VERIFICATION.json",
+    "original_sha256": "e3118e6032f7f66b0aadf41320696293b8933d16a53496112137ce07c51168a0",
+    "export_sha256": "aec1537801c450d5a37bd767591d3bf5b40dd4d178bda665feb07ef1338df686",
+    "bytes": 23026,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/paused_candidate_20261013/QUALITY_FINAL.json",
+    "export": "runs/publish_bugfix_20261014/paused_candidate_20261013/QUALITY_FINAL.json",
+    "original_sha256": "7fecb61608571f0c8f69b4f7aa943eb648aa91c18c55b3c6091096fde9a96688",
+    "export_sha256": "d302a5c561afc7d13edb33d4246f96830c31052ff1226babcdf87cb374be06b1",
+    "bytes": 307,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/stale_fallback_20261013/REPORT.md",
+    "export": "runs/publish_bugfix_20261014/stale_fallback_20261013/REPORT.md",
+    "original_sha256": "3c5afdd6dd98d96e17fc90ad5a1454e7a955d654151c7330089884ee739cc184",
+    "export_sha256": "3ffb9149a9a2b3f08f9dca7bf4b1d0e9272a0a1a803d01d49a0741e767c9b983",
+    "bytes": 1618,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/stale_fallback_20261013/FIX_VERIFICATION.json",
+    "export": "runs/publish_bugfix_20261014/stale_fallback_20261013/FIX_VERIFICATION.json",
+    "original_sha256": "3d66322bc3554612add91c74a8a31519b5721a309d0e0b8009c36357656912b7",
+    "export_sha256": "055be2e26e9f9925642091d2b74ebcf0047f78c0ec9063860be5ee9bd5e2c6ac",
+    "bytes": 1223,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/stale_fallback_20261013/QUALITY_FINAL.json",
+    "export": "runs/publish_bugfix_20261014/stale_fallback_20261013/QUALITY_FINAL.json",
+    "original_sha256": "7c388611939608c42a04438cdcbf5daf932207c8aa1113c2d868961ac90c8a12",
+    "export_sha256": "19696e3d2b4709b9a1fbc38a646ab47239f065e94a67b0ea950b38f0f9a3c579",
+    "bytes": 308,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/FIX_REPORT.md",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/FIX_REPORT.md",
+    "original_sha256": "390c0be7c85a7bf78cff004813597ea5101150276bff9f9193d590dcf20adf2c",
+    "export_sha256": "fe2b7955dc21b3016d0009888d8cd7e490d7071e0fc9d8de44755a3577818903",
+    "bytes": 2559,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/BEFORE_AFTER_CI95.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/BEFORE_AFTER_CI95.json",
+    "original_sha256": "96d8421ed860d0e771b24ed058e5bada06403cdeb43b20411409a4fcf42b9319",
+    "export_sha256": "5e44c40f43d3e81dc17e93591108331e7d792e8440f117c3f652feed84c6159d",
+    "bytes": 1748,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/before_after_S4_validation.csv",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/before_after_S4_validation.csv",
+    "original_sha256": "2d56ebe2901dbba2feafea3b06320e9ca58a172b00a24a789ce2daa4bf605d6f",
+    "export_sha256": "029b5c75b93a8dd5373e0c13da829dcf90203ab542768e18bf71bf4413f757c2",
+    "bytes": 11530,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/QUALITY_FINAL.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/QUALITY_FINAL.json",
+    "original_sha256": "2362b1be72d61e0a202ddd5008b5b2f84b011c201fe617a4c76ded1e9fbc6d05",
+    "export_sha256": "4a5c0258f22ccde057e8167afc5479abb44f150a71d17a3081a06935dd9cbca7",
+    "bytes": 307,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/SOURCE_REVIEW.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/SOURCE_REVIEW.json",
+    "original_sha256": "35d02844fd021ea197eb7b1db4589e93e55f16d56a83652496bc9abb3acf0a65",
+    "export_sha256": "f2b229f4c59d7b08ae793c1f7655381cfab34f0ea8bebcc086b5aa065ab70ca4",
+    "bytes": 589,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/VALIDATION_SUMMARY.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/VALIDATION_SUMMARY.json",
+    "original_sha256": "5c5a46e3026faec8ff2d6455da018c68458a40c78d5feeb3b5a5e7d68b9cc3f1",
+    "export_sha256": "6f86bfc0bb3456c494666a8e514473319a5307f0d28df7a532644d8d0abc2e60",
+    "bytes": 325,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/pytest_full.xml",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/pytest_full.xml",
+    "original_sha256": "3d662b0f924fff2248fb676afb0bbb9cf9365d5ce99fcfbd00a4ca4d44a1e0b3",
+    "export_sha256": "f5a762b8bd2d7716ec6ac12e1cb992edc8f0984bcd34e002198886efa875d1d6",
+    "bytes": 26035,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/controlled_validation1000/plan.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/controlled_validation1000/plan.json",
+    "original_sha256": "7d410ca2330c72f5d4aa6b0da46c4091c7c741d9ea33e52fbf2e5b7df85f88dd",
+    "export_sha256": "a86c8e691b71ab7d115e029ba0ebc6ffd45e66b0ee727f017c3bcde427939d61",
+    "bytes": 4545,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/controlled_validation1000/result.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/controlled_validation1000/result.json",
+    "original_sha256": "9dc4e7415dfecbc47668abee583ca13f72203faef1950be70cf23885bbe8c29b",
+    "export_sha256": "726200675fef37ae0a4012d1818e575fd64d562548e827be5c14f6cbc9dcf7fc",
+    "bytes": 10335,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_fix_20261013/controlled_validation1000/map.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_fix_20261013/controlled_validation1000/map.json",
+    "original_sha256": "a15f1e7430fa0edf9dddebba495a327856a2fe4282c50e4555fc52e48b440f8f",
+    "export_sha256": "d42afe555d5059e736882f2cd831f551dc963671c58a2c6ed3d156cde20631ee",
+    "bytes": 789,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_validation_20261013/controlled_validation1000/plan.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_validation_20261013/controlled_validation1000/plan.json",
+    "original_sha256": "02c55829e62b27b8c6a3fddeffebe7ff9f85406df78bc8f67c481b9487962c7b",
+    "export_sha256": "0bee6effd212d1e5b1f63cb4e222a79cd7b10bacc1b768a1ea4782a429bbd3a2",
+    "bytes": 4552,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_validation_20261013/controlled_validation1000/result.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_validation_20261013/controlled_validation1000/result.json",
+    "original_sha256": "419a202bb2364a9dc501ecea8309d628c1e563a9beca1670cffc37a602a570a2",
+    "export_sha256": "4e1ad8f5dec61d8d6ea09f34f8467b98be3c357ea9164a9a7d474ed4573479ff",
+    "bytes": 8374,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/endpoint_wait_validation_20261013/controlled_validation1000/map.json",
+    "export": "runs/publish_bugfix_20261014/endpoint_wait_validation_20261013/controlled_validation1000/map.json",
+    "original_sha256": "a15f1e7430fa0edf9dddebba495a327856a2fe4282c50e4555fc52e48b440f8f",
+    "export_sha256": "d42afe555d5059e736882f2cd831f551dc963671c58a2c6ed3d156cde20631ee",
+    "bytes": 789,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/FINAL_REPORT.md",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/FINAL_REPORT.md",
+    "original_sha256": "bf257261997c9d6cd1fcea2dcd6d6dd191abe23c898e68a3c34bc28eb15dc5b4",
+    "export_sha256": "39c629f4d42b1858a11e9f62ffb7041f7ccc8d6ea5aff22ff8a7a0ead098a6db",
+    "bytes": 11032,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/nonlearning_aggregate.csv",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/nonlearning_aggregate.csv",
+    "original_sha256": "55bd5f2f9967b5c4f0b81b935d4ba033127194a208248c421346027a65bbde0a",
+    "export_sha256": "31a3c7694587c65a2490dbccd93bb17fe16cf3052fbda4930c9b90db551c9968",
+    "bytes": 22723,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/nonlearning_metrics.csv",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/nonlearning_metrics.csv",
+    "original_sha256": "91caa43a83a584abe07233bdc2d078f4e5ef3aa2277cd7491e6af8a80d018e9e",
+    "export_sha256": "97d231b31f2360d0ae72af1b1eb62f7ad67531c202de90424e08a5e908ab9d86",
+    "bytes": 156768,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/nonlearning_paired_CI95.csv",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/nonlearning_paired_CI95.csv",
+    "original_sha256": "0142c8b00c5ba6e9a713c542a2303a8c14577e646fc40dcf239ca86b2c7c81e5",
+    "export_sha256": "0221640bb606c44d8431747c30f855053a1af326f46103e7c426a575533b70c9",
+    "bytes": 47277,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/COMPLETION_AUDIT.json",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/COMPLETION_AUDIT.json",
+    "original_sha256": "2b679b228f713f82d084954c3df4f96a24205f26df0105f74f6c3937eaa3f9b1",
+    "export_sha256": "574583f5445f37ec309c3c6f728c6eb7190f6bf96ccaf6098307a21f41bf4b5f",
+    "bytes": 1343,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/PHASE_COMPLETE.json",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/PHASE_COMPLETE.json",
+    "original_sha256": "1b8da666d7612fa5ce6a823bbfe88a3acb9d895bba1b7431e47fc11c835cd392",
+    "export_sha256": "74991f775cc3eb3e2e7301305bc756a39a6ca0f268f29bf604096fc8a50c3b18",
+    "bytes": 283,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/traffic_light.csv",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/traffic_light.csv",
+    "original_sha256": "48281db00a6db8c28da72daa91723cdc12e706bb74f6df11d3536c5cb944aa8a",
+    "export_sha256": "9a49e32d100892f07ca0a86ccb9f0881fa37b245554648a1f859c33ce3944287",
+    "bytes": 2421,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/STOP_REQUIRED_first_completion.json",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/STOP_REQUIRED_first_completion.json",
+    "original_sha256": "c5f52bb0709ec05db15887f423de1d1f9aa37dd2bbd2e15397017a1b35c69545",
+    "export_sha256": "a3ba505e3721038ec7ec4b952af10b01fe79582bbeb3be885e8f3756a933d826",
+    "bytes": 214,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/readiness_nonlearning_fresh_20261013/S6_CALENDAR_WITNESS.json",
+    "export": "runs/publish_bugfix_20261014/readiness_nonlearning_fresh_20261013/S6_CALENDAR_WITNESS.json",
+    "original_sha256": "5e32713b3bc2004d6bf11a65ff119e98aa5e149583fbe23465f92e8c9a194e1b",
+    "export_sha256": "186fab63218cc689b4065e255426f43e6e2b2f1f3377ca40497b9234bd2bf006",
+    "bytes": 4258,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/study14_current_source_testonly/README.md",
+    "export": "runs/publish_bugfix_20261014/study14_current_source_testonly/README.md",
+    "original_sha256": "1ee4f6e6f98d465b6394c330a8f3deb7709f0a9265cdbf05c2441305d9c0a382",
+    "export_sha256": "1ee4f6e6f98d465b6394c330a8f3deb7709f0a9265cdbf05c2441305d9c0a382",
+    "bytes": 1668,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/study14_current_source_testonly/identity.json",
+    "export": "runs/publish_bugfix_20261014/study14_current_source_testonly/identity.json",
+    "original_sha256": "7a91324bf940aa4b98b87a5706a33a28608a64ec5d9b007f57697d35924c16d4",
+    "export_sha256": "c3d94601793b74be6cdd246ffd6e948346eaff7727de513f4bfe57e7d23cbdd2",
+    "bytes": 1939,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/study14_current_source_testonly/status.json",
+    "export": "runs/publish_bugfix_20261014/study14_current_source_testonly/status.json",
+    "original_sha256": "aa7d6cb0d4ac8abac9a125c8e0bc6dd0d3cbb35af0a148eefb3545b18532a7a8",
+    "export_sha256": "51bff5291e64e9118869991f96804d248771d457a86d4f15213f7f06b939f4fb",
+    "bytes": 61,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/study14_current_source_testonly/episodes.csv",
+    "export": "runs/publish_bugfix_20261014/study14_current_source_testonly/episodes.csv",
+    "original_sha256": "8e8b1f63b96923767bf3e070083f599f2d6729e7b2f92524b71f22043f63e8a3",
+    "export_sha256": "197424fb1174d9289f846b24c80e43551a9a8e1bbe40671bd59b41b0aa15c34a",
+    "bytes": 450188,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/study14_current_source_testonly/summary.json",
+    "export": "runs/publish_bugfix_20261014/study14_current_source_testonly/summary.json",
+    "original_sha256": "22b74e202ffbd73c4c0274949f561abb0a39a95f1da6b2d18af715f331bcc67f",
+    "export_sha256": "a9e88e981083ba2b66a7ff38d074dfc94edd455c0e2716eaa0e350a2d0d043bb",
+    "bytes": 2482827,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/study14_current_source_testonly/run.py",
+    "export": "runs/publish_bugfix_20261014/study14_current_source_testonly/run.py",
+    "original_sha256": "945ea3ec5d066f64aa6a2ef479862bfc4e20593fea3f11c6d0db71df0d2bf616",
+    "export_sha256": "945ea3ec5d066f64aa6a2ef479862bfc4e20593fea3f11c6d0db71df0d2bf616",
+    "bytes": 8174,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/demo3d_recorded_validation/REPORT.md",
+    "export": "runs/publish_bugfix_20261014/demo3d_recorded_validation/REPORT.md",
+    "original_sha256": "c1c965d6101713731d2902e9c182be11daab13df51d6580ff44507046280ec28",
+    "export_sha256": "c1c965d6101713731d2902e9c182be11daab13df51d6580ff44507046280ec28",
+    "bytes": 2482,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/demo3d_recorded_validation/pytest_final.xml",
+    "export": "runs/publish_bugfix_20261014/demo3d_recorded_validation/pytest_final.xml",
+    "original_sha256": "708c506103b6a1adae968ff5f3019f2e5b08f7fa74886eaf74423c5a32e7ca68",
+    "export_sha256": "95513a554d4d5e8e07c3d752d5a0edf1cb22851b53775e84ae4e4df28668beb8",
+    "bytes": 1698,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  },
+  {
+    "source": "runs/demo3d_recorded_validation/api_evidence.json",
+    "export": "runs/publish_bugfix_20261014/demo3d_recorded_validation/api_evidence.json",
+    "original_sha256": "09e752961c21b345906c66be1e6a6d10b801774332edbefc3ddb17cdc5fa3deb",
+    "export_sha256": "001533af767d697d52d90d011964de5e47691c0f922e1ce6307b0d67f5c88b5c",
+    "bytes": 2488,
+    "normalization": "LF; repository-relative personal paths; anonymous hostname; JSON/CSV serialization; exported Markdown links where available"
+  }
+]

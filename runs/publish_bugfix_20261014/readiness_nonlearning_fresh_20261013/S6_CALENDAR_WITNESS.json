@@ -1,0 +1,164 @@
+{
+  "time_s": 1195.0,
+  "actual_task_candidates": 0,
+  "empty_calendar_task_candidates": 48,
+  "examples": [
+    {
+      "robot_id": 0,
+      "kind": "task",
+      "task_id": 35,
+      "port_id": null,
+      "target_soc": null,
+      "start_s": null,
+      "end_s": null,
+      "arrival_s": null,
+      "target_position": [
+        27,
+        18
+      ],
+      "estimated_energy_wh": 21.517291666666665,
+      "reason": "eligible_task",
+      "metadata": {
+        "travel_m": 24.0,
+        "empty_travel_m": 3.0,
+        "pickup_eta_s": 1196.5,
+        "expected_completion_s": 1227.0,
+        "required_with_reserve_wh": 21.517291666666665,
+        "return_port_id": 3,
+        "return_eta_s": 1231.5,
+        "return_calendar_start_s": 1235.0
+      }
+    },
+    {
+      "robot_id": 0,
+      "kind": "task",
+      "task_id": 34,
+      "port_id": null,
+      "target_soc": null,
+      "start_s": null,
+      "end_s": null,
+      "arrival_s": null,
+      "target_position": [
+        31,
+        22
+      ],
+      "estimated_energy_wh": 22.185416666666665,
+      "reason": "eligible_task",
+      "metadata": {
+        "travel_m": 37.0,
+        "empty_travel_m": 7.0,
+        "pickup_eta_s": 1198.5,
+        "expected_completion_s": 1233.5,
+        "required_with_reserve_wh": 22.185416666666665,
+        "return_port_id": 0,
+        "return_eta_s": 1239.0,
+        "return_calendar_start_s": 1240.0
+      }
+    },
+    {
+      "robot_id": 0,
+      "kind": "task",
+      "task_id": 36,
+      "port_id": null,
+      "target_soc": null,
+      "start_s": null,
+      "end_s": null,
+      "arrival_s": null,
+      "target_position": [
+        35,
+        20
+      ],
+      "estimated_energy_wh": 21.527291666666667,
+      "reason": "eligible_task",
+      "metadata": {
+        "travel_m": 30.0,
+        "empty_travel_m": 15.0,
+        "pickup_eta_s": 1202.5,
+        "expected_completion_s": 1230.0,
+        "required_with_reserve_wh": 21.527291666666667,
+        "return_port_id": 3,
+        "return_eta_s": 1234.5,
+        "return_calendar_start_s": 1235.0
+      }
+    },
+    {
+      "robot_id": 0,
+      "kind": "task",
+      "task_id": 38,
+      "port_id": null,
+      "target_soc": null,
+      "start_s": null,
+      "end_s": null,
+      "arrival_s": null,
+      "target_position": [
+        35,
+        20
+      ],
+      "estimated_energy_wh": 21.233958333333334,
+      "reason": "eligible_task",
+      "metadata": {
+        "travel_m": 20.0,
+        "empty_travel_m": 15.0,
+        "pickup_eta_s": 1202.5,
+        "expected_completion_s": 1225.0,
+        "required_with_reserve_wh": 21.233958333333334,
+        "return_port_id": 3,
+        "return_eta_s": 1230.5,
+        "return_calendar_start_s": 1235.0
+      }
+    },
+    {
+      "robot_id": 0,
+      "kind": "task",
+      "task_id": 14,
+      "port_id": null,
+      "target_soc": null,
+      "start_s": null,
+      "end_s": null,
+      "arrival_s": null,
+      "target_position": [
+        15,
+        8
+      ],
+      "estimated_energy_wh": 22.500833333333333,
+      "reason": "eligible_task",
+      "metadata": {
+        "travel_m": 53.0,
+        "empty_travel_m": 25.0,
+        "pickup_eta_s": 1207.5,
+        "expected_completion_s": 1241.5,
+        "required_with_reserve_wh": 22.500833333333333,
+        "return_port_id": 0,
+        "return_eta_s": 1247.0,
+        "return_calendar_start_s": 1250.0
+      }
+    },
+    {
+      "robot_id": 0,
+      "kind": "task",
+      "task_id": 22,
+      "port_id": null,
+      "target_soc": null,
+      "start_s": null,
+      "end_s": null,
+      "arrival_s": null,
+      "target_position": [
+        23,
+        6
+      ],
+      "estimated_energy_wh": 21.904791666666664,
+      "reason": "eligible_task",
+      "metadata": {
+        "travel_m": 36.0,
+        "empty_travel_m": 19.0,
+        "pickup_eta_s": 1204.5,
+        "expected_completion_s": 1233.0,
+        "required_with_reserve_wh": 21.904791666666664,
+        "return_port_id": 3,
+        "return_eta_s": 1237.5,
+        "return_calendar_start_s": 1240.0
+      }
+    }
+  ],
+  "interpretation": "Diagnostic only; no booking or guard changed in an executed episode. Calendar blocks physically energy-feasible task proposals at this snapshot; not proof of a specific fix or total performance cause."
+}

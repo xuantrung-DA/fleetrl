@@ -1,0 +1,11 @@
+{
+  "diagnosis_and_six_ablations": "360 complete episodes; diagnosis before edits preserved",
+  "parking_stability_and_next_cycle": "3 controllers each, passed final XML",
+  "validation": "5 validation seeds x 9 groups x 2 solver controls, all declared gates passed",
+  "energy_empty_ratio": "REPORT.md and aggregate.csv",
+  "task_cycle_charge_traces": "per-case JSON and occupancy CSV",
+  "preservation": "common config/tape/checkpoint matched, source hash matched, protected paths unchanged, 126 original test functions unchanged",
+  "quality": "193 tests, Ruff/checksum/diff passed",
+  "report": "REPORT.md read and verified",
+  "complete": true
+}

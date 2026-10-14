@@ -1,0 +1,9 @@
+{
+  "episodes": 300,
+  "source_hash": "8bb96d90d4c7ac92595fdb4805c33ce5ffb958736237611a42f5b59948319c95",
+  "completion_failures": [
+    "S6_replay1200_fixed_cpsat_3005"
+  ],
+  "retained_stop_marker_is_history": true,
+  "continuation_approval": "CONTINUE_COMPLETION_APPROVAL.json"
+}

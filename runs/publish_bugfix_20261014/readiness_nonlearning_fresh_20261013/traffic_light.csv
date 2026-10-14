@@ -1,0 +1,61 @@
+﻿cases,method,planned,scenario,status
+5,heuristic,5,S4_replay1200,DAT
+5,fixed_cpsat,5,S4_replay1200,CHUA KIEM
+5,forecast_mpc_milp,5,S4_replay1200,CHUA KIEM
+5,heuristic,5,S2_replay1200,DAT
+5,fixed_cpsat,5,S2_replay1200,CHUA KIEM
+5,forecast_mpc_milp,5,S2_replay1200,CHUA KIEM
+5,heuristic,5,S6_replay1200,DAT
+5,fixed_cpsat,5,S6_replay1200,KHONG DAT
+5,forecast_mpc_milp,5,S6_replay1200,CHUA KIEM
+5,heuristic,5,zero_inside,DAT
+5,fixed_cpsat,5,zero_inside,CHUA KIEM
+5,forecast_mpc_milp,5,zero_inside,CHUA KIEM
+5,heuristic,5,zero_outside,DAT
+5,fixed_cpsat,5,zero_outside,CHUA KIEM
+5,forecast_mpc_milp,5,zero_outside,CHUA KIEM
+5,heuristic,5,sparse,DAT
+5,fixed_cpsat,5,sparse,CHUA KIEM
+5,forecast_mpc_milp,5,sparse,CHUA KIEM
+5,heuristic,5,arrival_during_parking,DAT
+5,fixed_cpsat,5,arrival_during_parking,CHUA KIEM
+5,forecast_mpc_milp,5,arrival_during_parking,CHUA KIEM
+5,heuristic,5,delay_0,DAT
+5,fixed_cpsat,5,delay_0,CHUA KIEM
+5,forecast_mpc_milp,5,delay_0,CHUA KIEM
+5,heuristic,5,delay_1,DAT
+5,fixed_cpsat,5,delay_1,CHUA KIEM
+5,forecast_mpc_milp,5,delay_1,CHUA KIEM
+5,heuristic,5,delay_5,DAT
+5,fixed_cpsat,5,delay_5,CHUA KIEM
+5,forecast_mpc_milp,5,delay_5,CHUA KIEM
+5,heuristic,5,delay_10,DAT
+5,fixed_cpsat,5,delay_10,CHUA KIEM
+5,forecast_mpc_milp,5,delay_10,CHUA KIEM
+5,heuristic,5,delay_15,DAT
+5,fixed_cpsat,5,delay_15,CHUA KIEM
+5,forecast_mpc_milp,5,delay_15,CHUA KIEM
+5,heuristic,5,full_burst_recovery,DAT
+5,fixed_cpsat,5,full_burst_recovery,CHUA KIEM
+5,forecast_mpc_milp,5,full_burst_recovery,CHUA KIEM
+5,heuristic,5,heavy80_low_soc,DAT
+5,fixed_cpsat,5,heavy80_low_soc,CHUA KIEM
+5,forecast_mpc_milp,5,heavy80_low_soc,CHUA KIEM
+5,heuristic,5,urgent_region_shift,DAT
+5,fixed_cpsat,5,urgent_region_shift,CHUA KIEM
+5,forecast_mpc_milp,5,urgent_region_shift,CHUA KIEM
+5,heuristic,5,blocked_pause_yield,DAT
+5,fixed_cpsat,5,blocked_pause_yield,CHUA KIEM
+5,forecast_mpc_milp,5,blocked_pause_yield,CHUA KIEM
+5,heuristic,5,layout_A_burst_1,DAT
+5,fixed_cpsat,5,layout_A_burst_1,CHUA KIEM
+5,forecast_mpc_milp,5,layout_A_burst_1,CHUA KIEM
+5,heuristic,5,layout_B_burst_1,DAT
+5,fixed_cpsat,5,layout_B_burst_1,CHUA KIEM
+5,forecast_mpc_milp,5,layout_B_burst_1,CHUA KIEM
+5,heuristic,5,layout_A_burst_2.5,DAT
+5,fixed_cpsat,5,layout_A_burst_2.5,CHUA KIEM
+5,forecast_mpc_milp,5,layout_A_burst_2.5,CHUA KIEM
+5,heuristic,5,layout_B_burst_2.5,DAT
+5,fixed_cpsat,5,layout_B_burst_2.5,CHUA KIEM
+5,forecast_mpc_milp,5,layout_B_burst_2.5,CHUA KIEM
