@@ -1,0 +1,34 @@
+{
+  "source_hash": "a5697e0bd8be567caa1cf3878d268da1be402b3193ed82940f50f85de155ce5b",
+  "original_test_functions_unchanged": 126,
+  "protected_sources_identical_to_before_charge_fix": [
+    "src/fleetrl/env.py",
+    "src/fleetrl/observations.py",
+    "src/fleetrl/metrics.py",
+    "src/fleetrl/types.py",
+    "src/fleetrl/simulator.py",
+    "src/fleetrl/energy.py"
+  ],
+  "changes_for_charge_fix": [
+    "optimizer.py",
+    "new optimizer tests",
+    "ABOUT.md",
+    "checksum manifest"
+  ],
+  "all_negative_variants_preserved": true,
+  "authorization": "Human selected Cho phép xử lý nút thắt sạc trước; same return-calendar root confirmed for heuristic1001 and fixed1008",
+  "no_study14_train_or_tune": true,
+  "pytest": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "0",
+    "tests": "200",
+    "time": "209.414",
+    "timestamp": "2026-10-13T21:23:40.772107+07:00",
+    "hostname": "anonymous-host"
+  },
+  "ruff_check": "passed",
+  "ruff_format_check": "79 files already formatted",
+  "checksum": "192 file checksums verified"
+}

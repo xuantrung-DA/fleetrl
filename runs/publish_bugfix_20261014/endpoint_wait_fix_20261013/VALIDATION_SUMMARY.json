@@ -1,0 +1,16 @@
+{
+  "fixed_cpsat": {
+    "completed": -0.4,
+    "pending": 0.4,
+    "completion_rate": -0.009779367918902803,
+    "total_lateness_s": 186.07142856135007,
+    "safety_after": 0.0
+  },
+  "heuristic": {
+    "completed": 0,
+    "pending": 0,
+    "completion_rate": 0.0,
+    "total_lateness_s": 0.0,
+    "safety_after": 0.0
+  }
+}

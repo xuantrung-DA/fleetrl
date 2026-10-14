@@ -16,6 +16,7 @@ from torch.distributions import Categorical
 
 from ..observations import observation_space
 from ..optimizer import earliest_slot, queue_fits
+from ..parking import task_dispatchable
 from ..types import Decision, DecisionPlan
 
 MAX_CHOICES = 64
@@ -54,7 +55,7 @@ def dispatch_observation(owner, snapshot, obs):
         if len(options) > MAX_CHOICES:
             raise ValueError("candidate count exceeds fixed MAPPO schema")
         choices[index] = (robot.id, options)
-        active[index] = float(robot.status == "idle" and bool(options))
+        active[index] = float(task_dispatchable(robot) and bool(options))
         for j, c in enumerate(options):
             d = c.decision
             kind = ["wait", "task", "charge", "reposition"].index(d.kind)

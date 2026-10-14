@@ -12,6 +12,7 @@ from time import perf_counter
 from ortools.linear_solver import pywraplp
 
 from ..optimizer import COST_SCALE
+from ..parking import task_dispatchable
 from ..types import DecisionPlan
 
 
@@ -173,7 +174,8 @@ def solve_dispatch(owner, snapshot, candidates, profile, profile_id, started, de
     ]
     mean_service = sum(recent) / len(recent) if recent else 120.0
     work = sum(
-        r.port_id is None and (r.task_id is not None or r.status == "reposition")
+        r.port_id is None
+        and (r.task_id is not None or (r.status == "reposition" and not task_dispatchable(r)))
         for r in snapshot.robots
     )
     required = min(n, max(len(backlog), ceil(sum(rates) * mean_service)))
@@ -191,7 +193,9 @@ def solve_dispatch(owner, snapshot, candidates, profile, profile_id, started, de
             current = sum(
                 snapshot.warehouse.zone_of(r.position) == z
                 and r.port_id is None
-                and (r.task_id is not None or r.status == "reposition")
+                and (
+                    r.task_id is not None or (r.status == "reposition" and not task_dispatchable(r))
+                )
                 for r in snapshot.robots
             )
             count = current + solver.Sum(

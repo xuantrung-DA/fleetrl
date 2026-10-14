@@ -1,0 +1,24 @@
+[
+  {
+    "method": "mappo_dispatch",
+    "train_seed": 11,
+    "source": "runs/study14/jobs/train_mappo_dispatch_11/attempt_002/best_model.zip",
+    "export": "demo3d/models/mappo_dispatch/seed11/best_model.zip",
+    "original_sha256": "7783db9387c017fb24a2edf54b2fc8212746733de5c3febe5a0d8e6106ec69bb",
+    "export_sha256": "1fb9aefb288c27ddeca1e660217cf8ee4275c08a813a7bd7baf32b3150fa29f2",
+    "payload_sha256": "7dd9f8da92eb40ca7e18e11dffa59eefa1f151f169ffe01f7a1a5c4ff25aae2f",
+    "payload_unchanged": true,
+    "normalization": "Repository-relative lineage paths; sidecar and lock export hash"
+  },
+  {
+    "method": "dqn_cpsat",
+    "train_seed": 11,
+    "source": "runs/study14/jobs/train_dqn_cpsat_11/attempt_001/best_model.zip",
+    "export": "demo3d/models/dqn_cpsat/seed11/best_model.zip",
+    "original_sha256": "14bb0370778689a04fae55252d1f2b3f7ab6e0392d69db5f354f34cca3a10539",
+    "export_sha256": "14bb0370778689a04fae55252d1f2b3f7ab6e0392d69db5f354f34cca3a10539",
+    "payload_sha256": "a9e29f9f2e49972dd2975b1db5e704366dca7dd85e20fd70cc2ba3d76fa99502",
+    "payload_unchanged": true,
+    "normalization": "Repository-relative lineage paths; sidecar and lock export hash"
+  }
+]

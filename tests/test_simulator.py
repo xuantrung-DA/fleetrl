@@ -2,6 +2,7 @@
 
 from dataclasses import asdict
 from math import ceil
+from pathlib import Path
 
 import pytest
 
@@ -461,3 +462,333 @@ def test_predictably_late_booking_cancelled_before_wait_bound(tmp_path):
     assert sim.counters["energy_emergencies"] == 0
     assert r.status == "reposition" and r.target_position in sim.warehouse.parking
     assert any(e["kind"] == "charge_booking_cancelled" for e in sim.events)
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["heuristic", "fixed_cpsat", "mappo_dispatch"])
+def test_no_orders_fleet_stays_parked_for_600_seconds(method):
+    import numpy as np
+
+    from fleetrl.env import FleetEnv
+    from fleetrl.methods.registry import get_method
+
+    cfg = get_method(method).configure(
+        FleetConfig(
+            n_robots=10,
+            initial_tasks=0,
+            demand_per_hour=0,
+            disturbances=False,
+            initial_soc_min=0.99,
+            initial_soc_max=0.99,
+            horizon_s=600,
+        )
+    )
+    env = FleetEnv(cfg)
+    env.reset(seed=1000)
+    initial = {r.id: r.position for r in env.sim.robots.values()}
+    initial_energy = env.initial_battery_wh
+
+    def check_tick():
+        for r in env.sim.robots.values():
+            assert r.position == initial[r.id]
+            assert r.status == "idle"
+            assert r.target_position is None and not r.path and r.move_to is None
+
+    env.set_tick_observer(check_tick)
+    for _ in range(120):
+        action = 0
+        if method == "mappo_dispatch":
+            action = np.zeros(20, dtype=int)
+            for index, (_, options) in env._choices.items():
+                # An adversarial preference cannot recreate an ineligible parking move.
+                parking = [j for j, c in enumerate(options) if c.decision.kind == "reposition"]
+                assert not parking
+        env.step(action)
+    assert env.sim.counters["distance_m"] == 0
+    assert initial_energy - sum(r.battery_wh for r in env.sim.robots.values()) == pytest.approx(20)
+    assert env.metrics()["safety_incidents"] == 0
+    env.close()
+
+
+def test_wait_outside_parking_returns_to_bay_then_stays(tmp_path):
+    from fleetrl.optimizer import FleetOptimizer
+
+    sim = make_sim(tmp_path)
+    r = robot(position=(2, 2), battery=290)
+    set_robots(sim, [r])
+    assert commit(sim, [Decision(0, "wait")])["accepted"]
+    assert r.status == "reposition"
+    goal = r.target_position
+    sim.advance(20)
+    assert r.position == goal and r.status == "idle"
+    changed_at = r.metadata["parking_changed_at_s"]
+    battery = r.battery_wh
+    distance = sim.counters["distance_m"]
+    opt = FleetOptimizer(sim.config)
+    for _ in range(60):
+        sim.submit_plan(opt.decide(sim.snapshot()))
+        sim.advance(5)
+        assert r.position == goal and r.status == "idle"
+        assert r.target_position is None and not r.path and r.move_to is None
+    assert r.metadata["parking_changed_at_s"] == changed_at
+    assert sim.counters["distance_m"] == distance
+    assert battery - r.battery_wh == pytest.approx(12 * 300 / 3600)
+
+
+@pytest.mark.parametrize("mechanism", ["endpoint", "deadlock_blocker"])
+def test_yield_to_new_parking_does_not_return_or_loop(tmp_path, mechanism):
+    from fleetrl.optimizer import FleetOptimizer
+
+    sim = make_sim(tmp_path, 2)
+    blocker = robot(0, (2, 2), battery=290)
+    requester = robot(1, (1, 2), battery=290)
+    set_robots(sim, [blocker, requester])
+    if mechanism == "endpoint":
+        assert sim._park_idle_blocker(blocker, requester.id)
+    else:
+        requester.status = "to_pickup"
+        requester.target_position = blocker.position
+        sim._recover_deadlock(requester)
+        assert any(e["kind"] == "deadlock_blocker_yield" for e in sim.events)
+        requester.status = "idle"
+        requester.target_position = None
+    goal = blocker.target_position
+    sim.advance(20)
+    assert blocker.position == goal and blocker.status == "idle"
+    opt = FleetOptimizer(sim.config)
+    for _ in range(60):
+        sim.submit_plan(opt.decide(sim.snapshot()))
+        sim.advance(5)
+        assert blocker.position == goal and blocker.status == "idle"
+        assert blocker.target_position is None and not blocker.path
+
+
+def test_parking_deadlock_diversion_stops_at_new_bay(tmp_path):
+    sim = make_sim(tmp_path)
+    r = robot(position=(2, 2), battery=290)
+    set_robots(sim, [r])
+    r.status = "reposition"
+    r.target_position = (6, 1)
+    sim._recover_deadlock(r)
+    sim._recover_deadlock(r)
+    bay = r.target_position
+    assert bay != (6, 1) and r.status == "recovering"
+    sim.advance(20)
+    assert r.position == bay and r.status == "idle"
+    sim.advance(300)
+    assert r.position == bay and r.status == "idle"
+    assert r.target_position is None and not r.path
+
+
+@pytest.mark.integration
+@pytest.mark.parametrize("method", ["heuristic", "fixed_cpsat", "mappo_dispatch"])
+def test_parking_robot_receives_arriving_task_at_next_decision(tmp_path, method):
+    import numpy as np
+
+    from fleetrl.env import FleetEnv
+    from fleetrl.methods.registry import get_method
+
+    seed_sim = make_sim(tmp_path)
+    env = FleetEnv(get_method(method).configure(seed_sim.config))
+    env.reset(seed=1000)
+    r = robot(position=(1, 2), kind="H", battery=400)
+    set_robots(env.sim, [r])
+    assert commit(env.sim, [Decision(0, "reposition", target_position=(6, 1))])["accepted"]
+    env.sim.advance(5)
+    assert r.status == "reposition" and r.move_to is not None
+    task = add_task(env.sim, pickup=(5, 2), dropoff=(5, 3), weight=15)
+    env._observe()
+    action = 0
+    if method == "mappo_dispatch":
+        action = np.zeros(20, dtype=int)
+        assert env._observe()["active_agents"][0] == 1
+        action[0] = next(j for j, c in enumerate(env._choices[0][1]) if c.decision.kind == "task")
+    _, _, _, _, info = env.step(action)
+    assert task.assigned_at_s == 5
+    assert task.robot_id == r.id
+    assert any(a["kind"] == "task" for a in info["decision"]["commit"]["accepted"])
+    env.sim.advance(60)
+    assert task.status == "completed"
+    assert env.metrics()["safety_incidents"] == 0
+    env.close()
+
+
+def test_parking_task_handoff_preserves_committed_edge(tmp_path):
+    sim = make_sim(tmp_path)
+    r = robot(position=(1, 2), kind="H", battery=400)
+    set_robots(sim, [r])
+    commit(sim, [Decision(0, "reposition", target_position=(6, 1))])
+    sim.advance(0.5)
+    edge = sim.reservations.pending_move(0)
+    assert edge is not None
+    old_position, old_move = r.position, r.move_to
+    old_battery, old_distance = r.battery_wh, sim.counters["distance_m"]
+    task = add_task(sim, pickup=(1, 2), weight=5)
+    result = commit(sim, [Decision(0, "task", task_id=task.id)])
+    assert result["accepted"]
+    assert r.position == old_position and r.move_to == old_move
+    assert sim.reservations.pending_move(0) == edge
+    assert r.battery_wh == old_battery and sim.counters["distance_m"] == old_distance
+    assert r.status == "to_pickup" and r.target_position == task.pickup
+    sim.advance((edge.end_tick - sim.tick) * sim.config.tick_s)
+    assert r.position == old_move
+    assert sim.counters["distance_m"] == 1
+    sim.advance(90)
+    assert task.status == "completed"
+    assert sim.counters["collisions"] == sim.counters["edge_conflicts"] == 0
+
+
+def test_parking_handoff_checks_energy_from_edge_destination(tmp_path):
+    from dataclasses import replace
+
+    sim = make_sim(tmp_path)
+    r = robot(position=(1, 2), kind="H", battery=400)
+    set_robots(sim, [r])
+    commit(sim, [Decision(0, "reposition", target_position=(6, 1))])
+    sim.advance(0.5)
+    task = add_task(sim, pickup=(1, 2), weight=5)
+    required = sim._task_required_energy(r, task)
+    old_origin_required = sim._task_required_energy(
+        replace(r, status="idle", move_to=None, move_remaining_s=0),
+        task,
+    )
+    assert required > old_origin_required
+    r.battery_wh = (required + old_origin_required) / 2
+    edge = sim.reservations.pending_move(0)
+    result = commit(sim, [Decision(0, "task", task_id=task.id)])
+    assert result["rejected"][0]["reason"] == "insufficient_energy_or_charge_access"
+    assert task.status == "waiting" and r.task_id is None
+    assert sim.reservations.pending_move(0) == edge
+
+
+def test_due_charge_preempts_parking_without_cancelling_edge(tmp_path):
+    from fleetrl.optimizer import FleetOptimizer
+
+    sim = make_sim(tmp_path, controller="heuristic", advanced_charging=False)
+    r = robot(position=(1, 2), battery=89.9)
+    set_robots(sim, [r])
+    commit(sim, [Decision(0, "reposition", target_position=(6, 1))])
+    sim.advance(0.5)
+    edge = sim.reservations.pending_move(0)
+    assert edge is not None and r.soc < sim.config.charge_threshold
+    plan = FleetOptimizer(sim.config).decide(sim.snapshot())
+    assert plan.decisions[0].kind == "charge"
+    result = sim.submit_plan(plan)
+    assert result["accepted"] and not result["rejected"]
+    assert sim.reservations.pending_move(0) == edge
+    assert r.port_id == 0 and r.status == "to_charge_queue"
+    sim.advance(30)
+    assert r.status in {"docking", "charging"}
+    assert sim.counters["collisions"] == sim.counters["edge_conflicts"] == 0
+
+
+def test_healthy_parking_does_not_offer_elective_charge(tmp_path):
+    from dataclasses import replace
+
+    from fleetrl.optimizer import FleetOptimizer
+
+    sim = make_sim(tmp_path)
+    r = robot(position=(1, 2), battery=210)
+    set_robots(sim, [r])
+    commit(sim, [Decision(0, "reposition", target_position=(6, 1))])
+    sim.advance(0.5)
+    state = sim.snapshot()
+    idle = replace(r, status="idle", move_to=None, move_remaining_s=0)
+    idle_options = FleetOptimizer(sim.config).generate_candidates(replace(state, robots=(idle,)))
+    assert any(c.decision.kind == "charge" for c in idle_options)
+    options = FleetOptimizer(sim.config).generate_candidates(state)
+    assert not any(c.decision.kind == "charge" for c in options)
+
+
+def mutual_endpoint_sim(tmp_path: Path) -> Simulator:
+    sim = make_sim(tmp_path, 2)
+    waiting = robot(0, (3, 2), battery=290)
+    carrying = robot(1, (4, 2), battery=290)
+    waiting.status, waiting.task_id, waiting.target_position = "to_pickup", 0, (5, 2)
+    carrying.status, carrying.task_id, carrying.target_position = "to_dropoff", 1, (2, 2)
+    carrying.load_kg = 5
+    set_robots(sim, [waiting, carrying])
+    sim.tasks = {
+        0: Task(0, (5, 2), (5, 3), 5, 0, 600, status="assigned", robot_id=0, assigned_at_s=0),
+        1: Task(
+            1,
+            (5, 2),
+            (2, 2),
+            5,
+            0,
+            600,
+            status="carrying",
+            robot_id=1,
+            assigned_at_s=0,
+            picked_at_s=0,
+        ),
+    }
+    sim._endpoint_leases = {(2, 2): 0, (5, 2): 1}
+    return sim
+
+
+def test_mutual_endpoint_leases_recover_before_route_wait_guard(tmp_path: Path) -> None:
+    sim = mutual_endpoint_sim(tmp_path)
+    assert sim._endpoint_wait_cycle(sim.robots[0])
+    assert sim._endpoint_wait_cycle(sim.robots[1])
+    sim.advance(250)
+    assert sim.counters["completed"] == 2
+    assert sim.counters["energy_emergencies"] == 0
+    assert sim.counters["collisions"] == sim.counters["reserve_violations"] == 0
+    assert sim.deadlock_incidents
+    assert all(i["resolved_s"] is not None for i in sim.deadlock_incidents)
+    assert all(t.status == "completed" for t in sim.tasks.values())
+    assert not sim.invariant_incidents
+
+
+def test_active_service_owner_is_not_an_endpoint_wait_cycle(tmp_path: Path) -> None:
+    sim = mutual_endpoint_sim(tmp_path)
+    owner = sim.robots[1]
+    owner.position, owner.status, owner.target_position = (5, 2), "pickup", None
+    owner.load_kg = 0
+    owner.service_remaining_s = 100
+    task = sim.tasks[1]
+    task.status, task.picked_at_s, task.dropoff = "picking", 0, (5, 3)
+    sim.reservations = ReservationTable({r.id: r.position for r in sim.robots.values()})
+    assert not sim._endpoint_wait_cycle(sim.robots[0])
+    sim.advance(35)
+    assert sim.counters["deadlocks"] == sim.counters["energy_emergencies"] == 0
+    assert sim.robots[0].metadata["endpoint_wait"]
+
+
+def test_paused_endpoint_owner_does_not_trigger_cycle_recovery(tmp_path: Path) -> None:
+    sim = mutual_endpoint_sim(tmp_path)
+    sim.robots[1].paused_until_s = 100
+    assert not sim._endpoint_wait_cycle(sim.robots[0])
+    sim.advance(35)
+    assert sim.counters["deadlocks"] == sim.counters["energy_emergencies"] == 0
+
+
+def test_loaded_endpoint_cycle_preserves_goods_and_completes(tmp_path: Path) -> None:
+    sim = mutual_endpoint_sim(tmp_path)
+    first = sim.robots[0]
+    first.status, first.load_kg = "to_dropoff", 5
+    sim.tasks[0].status, sim.tasks[0].picked_at_s = "carrying", 0
+    sim.tasks[0].pickup, sim.tasks[0].dropoff = (2, 2), (5, 2)
+    sim.advance(250)
+    assert sim.counters["completed"] == 2
+    assert sim.counters["energy_emergencies"] == 0
+    assert sim.counters["deadlocks_unresolved"] == 0
+    assert all(t.status == "completed" for t in sim.tasks.values())
+    assert not sim.invariant_incidents
+
+
+def test_loaded_endpoint_diversion_preserves_original_energy_admission(tmp_path: Path) -> None:
+    sim = mutual_endpoint_sim(tmp_path)
+    first = sim.robots[0]
+    first.status, first.load_kg = "to_dropoff", 5
+    task = sim.tasks[0]
+    task.status, task.picked_at_s = "carrying", 0
+    task.pickup, task.dropoff = (2, 2), (5, 2)
+    first.battery_wh = sim._task_required_energy(first, task) + 0.01
+    original_goal = first.target_position
+    sim._recover_deadlock(first)
+    sim._recover_deadlock(first)
+    assert first.status == "to_dropoff" and first.target_position == original_goal
+    assert "recovery_goal" not in first.metadata
+    assert first.load_kg == 5 and task.robot_id == first.id

@@ -123,4 +123,14 @@ try{init()}catch(e){error(e)}
 
 export function resetLive(){live=false;playing=false;frames=[];idx=-1;liveBuffered=false;livePaused=false;liveFinished=false;}
 export function setLivePlayback(speed,paused,finished){liveSpeed=speed;livePaused=paused;liveFinished=finished;}
+export function installReplayWindow(data,target,resume){
+ const m=validMap(normalizeMap(data.header.map));let prev;
+ assert(data.frames.length,'Đoạn replay không có frame');
+ data.frames.forEach(f=>{validateFrame(f,m,prev);prev=f});
+ if(live||!map||JSON.stringify(map)!==JSON.stringify(m))loadMap(m);
+ frames=data.frames;live=false;isMock=false;time=target;idx=-1;playing=resume;
+ $('seek').min=data.start_s;$('seek').max=data.end_s;$('seek').disabled=false;
+ $('play').disabled=false;$('play').textContent=playing?'Ⅱ Pause':'▶ Phát';
+ $('mode').textContent='REPLAY ĐÃ LƯU';update();
+}
 export function pickCell(event){const b=renderer.domElement.getBoundingClientRect(),ray=new THREE.Raycaster();ray.setFromCamera(new THREE.Vector2((event.clientX-b.left)/b.width*2-1,-(event.clientY-b.top)/b.height*2+1),camera);const p=new THREE.Vector3();if(!ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),p))return null;return [Math.floor(p.x),Math.floor(p.z)];}

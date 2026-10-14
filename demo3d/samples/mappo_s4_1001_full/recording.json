@@ -1,0 +1,14 @@
+{
+  "id": "748f38c95f4e",
+  "method": "mappo_dispatch",
+  "scenario": "S4",
+  "seed": 1001,
+  "status": "complete",
+  "paused": false,
+  "speed": 1.0,
+  "record_only": true,
+  "modified": false,
+  "error": null,
+  "replay": "/api/replay?session=748f38c95f4e",
+  "time_s": 3600.0
+}

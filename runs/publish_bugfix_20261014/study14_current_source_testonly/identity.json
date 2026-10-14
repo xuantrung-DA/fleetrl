@@ -1,0 +1,64 @@
+{
+  "source_hash": "8bb96d90d4c7ac92595fdb4805c33ce5ffb958736237611a42f5b59948319c95",
+  "checkpoints": {
+    "mappo_dispatch_11": {
+      "path": "runs/study14/jobs/train_mappo_dispatch_11/attempt_002/best_model.zip",
+      "sha256": "7783db9387c017fb24a2edf54b2fc8212746733de5c3febe5a0d8e6106ec69bb"
+    },
+    "mappo_dispatch_12": {
+      "path": "runs/study14/jobs/train_mappo_dispatch_12/attempt_001/best_model.zip",
+      "sha256": "9f61a92b0af8052176a6dee469ad3a768f767b5fc836924806e2abcb467e5138"
+    },
+    "mappo_dispatch_13": {
+      "path": "runs/study14/jobs/train_mappo_dispatch_13/attempt_001/best_model.zip",
+      "sha256": "b2ce49b286c901ab5c8ba3613a4bf6ccb1c465d1a9808ddc9e78f3c98d201006"
+    },
+    "dqn_cpsat_11": {
+      "path": "runs/study14/jobs/train_dqn_cpsat_11/attempt_001/best_model.zip",
+      "sha256": "14bb0370778689a04fae55252d1f2b3f7ab6e0392d69db5f354f34cca3a10539"
+    },
+    "dqn_cpsat_12": {
+      "path": "runs/study14/jobs/train_dqn_cpsat_12/attempt_001/best_model.zip",
+      "sha256": "84f4fd74a0472efb8dc904757dcf4e9faf55eeb323f540e64dfb2f9476c0aa12"
+    },
+    "dqn_cpsat_13": {
+      "path": "runs/study14/jobs/train_dqn_cpsat_13/attempt_001/best_model.zip",
+      "sha256": "2c84ed5e5a7abcd77022a10dd939b882e6d7939fd748b807b18ccd2d5fe15301"
+    }
+  },
+  "selected_baselines": {
+    "heuristic": {
+      "charge_threshold": 0.2
+    },
+    "fixed_cpsat": {
+      "fixed_profile": 1
+    },
+    "forecast_mpc_milp": {
+      "forecast_alpha": 0.1,
+      "mpc_horizon_s": 150.0
+    }
+  },
+  "scenarios": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "S9"
+  ],
+  "tape_seeds": [
+    3005,
+    3006,
+    3007,
+    3008,
+    3009
+  ],
+  "horizon_s": 3600,
+  "n_robots": 15,
+  "checkpoint_label": "checkpoint train trên source cũ",
+  "training_or_tuning": false,
+  "interpretation": "Observed tapes reused for source transfer assessment, not a fresh holdout"
+}

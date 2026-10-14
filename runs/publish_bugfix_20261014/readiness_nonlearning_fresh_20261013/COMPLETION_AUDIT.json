@@ -1,0 +1,42 @@
+{
+  "source_hash": "8bb96d90d4c7ac92595fdb4805c33ce5ffb958736237611a42f5b59948319c95",
+  "frozen_source_hash": "8bb96d90d4c7ac92595fdb4805c33ce5ffb958736237611a42f5b59948319c95",
+  "source_matches_plan": true,
+  "plan_hash_valid": true,
+  "configs_match": true,
+  "tapes_match": true,
+  "completed_cases": 300,
+  "planned_cases": 300,
+  "status_counts": {
+    "DAT": 100,
+    "CHUA KIEM": 199,
+    "KHONG DAT": 1
+  },
+  "failed_cases": [
+    {
+      "job": "S6_replay1200_fixed_cpsat_3005",
+      "failures": [
+        "completion_lt_50_percent_non_extreme"
+      ]
+    }
+  ],
+  "safety_incidents": 0.0,
+  "lost_tasks": 0,
+  "max_p95_ms": 46.00856499382645,
+  "solver_timeout_unknown_cases": 200,
+  "deadlocks": 6.0,
+  "deadlocks_resolved": 6.0,
+  "deadlocks_unresolved": 0.0,
+  "unobserved_local_task_admissions": 0,
+  "summed_episode_wall_hours": 0.6708949926388837,
+  "disk_GiB": 1.0860064355656505,
+  "phase_complete": true,
+  "runner_exit_code": 0,
+  "source_changed_after_failure": false,
+  "training_or_tuning": false,
+  "learned_checkpoint_cases": 0,
+  "full_goal_complete": false,
+  "remaining_scope": "11 learners and timeout evidence remain unverified; only nonlearning phase authorized",
+  "completion_continuation_approval": "CONTINUE_COMPLETION_APPROVAL.json",
+  "historical_stop_marker": "STOP_REQUIRED_first_completion.json"
+}

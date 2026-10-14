@@ -1,0 +1,37 @@
+{
+  "scope": "S2/S4/S6 x seeds 1000..1004 x heuristic/fixed_cpsat/mappo_dispatch",
+  "horizon_s": 1200,
+  "paired_input": [
+    "tape",
+    "robot initialization",
+    "checkpoint",
+    "common config"
+  ],
+  "diagnostic_control": {
+    "max_deterministic_time": 0.03,
+    "solver_wall_s": 4,
+    "decision_wall_s": 5
+  },
+  "deployment_control": {
+    "solver_wall_s": 0.1,
+    "decision_wall_s": 0.25
+  },
+  "acceptance": {
+    "max_mean_pending_delta_tasks": 0.5,
+    "min_mean_completion_rate_delta": -0.01,
+    "safety_incidents": 0,
+    "lost_tasks": 0,
+    "seed_count_per_group": 5,
+    "noise_note": "Thresholds declared before the multi-seed current/ablation runs: at most 0.5 task per episode and 1 percentage point completion. Report sample SD and paired intervals; do not treat lack of significance as proof."
+  },
+  "ablation": [
+    "no_cost_correction",
+    "no_idle_return",
+    "no_residence",
+    "no_benefit_guard",
+    "no_goal_reservation",
+    "no_recovery_stability"
+  ],
+  "checkpoint": "runs/study14/jobs/train_mappo_dispatch_11/attempt_002/best_model.zip",
+  "phase": "diagnosis before production edits"
+}

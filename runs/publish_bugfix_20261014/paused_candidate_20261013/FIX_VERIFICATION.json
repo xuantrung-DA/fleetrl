@@ -1,0 +1,855 @@
+{
+  "source_hash": "ed607d948dea6e37bf2718c469e603476811b2eec8819f0c1dca4837beda6242",
+  "targeted_tests": 82,
+  "cases": [
+    {
+      "case": "arrival_during_parking_fixed_cpsat_1005",
+      "assessment": {
+        "failures": [],
+        "unverified": [
+          "solver_timeout_unknown"
+        ],
+        "status": "CHUA KIEM"
+      },
+      "assigned_at_s": 5.0,
+      "completed": 1,
+      "safety": 0.0,
+      "first_difference_time_s": 5,
+      "decision_at_5": {
+        "snapshot_version": 10,
+        "profile_id": 0,
+        "decisions": [
+          {
+            "robot_id": 0,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              6,
+              1
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {
+              "surrogate_cost": 0.00017
+            }
+          },
+          {
+            "robot_id": 1,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              7,
+              1
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {
+              "surrogate_cost": 0.00017
+            }
+          },
+          {
+            "robot_id": 2,
+            "kind": "reposition",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              19,
+              1
+            ],
+            "estimated_energy_wh": 21.613333333333333,
+            "reason": "eligible_reposition",
+            "metadata": {
+              "travel_m": 27.0,
+              "surrogate_cost": 0.0006479999999999999
+            }
+          },
+          {
+            "robot_id": 3,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              12,
+              1
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {
+              "surrogate_cost": 0.00017
+            }
+          },
+          {
+            "robot_id": 4,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              12,
+              28
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {
+              "surrogate_cost": 0.00017
+            }
+          },
+          {
+            "robot_id": 5,
+            "kind": "reposition",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              13,
+              1
+            ],
+            "estimated_energy_wh": 33.575,
+            "reason": "eligible_reposition",
+            "metadata": {
+              "travel_m": 16.0,
+              "surrogate_cost": 0.0007199999999999999
+            }
+          },
+          {
+            "robot_id": 6,
+            "kind": "reposition",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              11,
+              1
+            ],
+            "estimated_energy_wh": 33.05,
+            "reason": "eligible_reposition",
+            "metadata": {
+              "travel_m": 9.0,
+              "surrogate_cost": 0.000405
+            }
+          },
+          {
+            "robot_id": 7,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              28,
+              28
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {
+              "surrogate_cost": 0.00017
+            }
+          },
+          {
+            "robot_id": 8,
+            "kind": "task",
+            "task_id": 0,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              7,
+              6
+            ],
+            "estimated_energy_wh": 52.96766666666667,
+            "reason": "eligible_task",
+            "metadata": {
+              "travel_m": 11.0,
+              "empty_travel_m": 7.0,
+              "pickup_eta_s": 15.5,
+              "expected_completion_s": 41.5,
+              "required_with_reserve_wh": 52.96766666666667,
+              "return_port_id": 2,
+              "return_eta_s": 122.5,
+              "return_calendar_start_s": 125.0,
+              "surrogate_cost": -0.39893680000000004
+            }
+          }
+        ],
+        "solver_status": "OPTIMAL",
+        "solver_ms": 2.8858000005129725,
+        "total_ms": 27.57190000193077,
+        "fallback_reason": null,
+        "objective": 0.003686,
+        "candidate_count": 18,
+        "metadata": {
+          "profile_name": "balanced",
+          "objective_normalization": "all_additive_terms_per_robot",
+          "rejections": {
+            "payload": 8,
+            "charge_gain_below_5pct": 32,
+            "robot_paused": 1
+          },
+          "best_bound": 0.003686,
+          "required_available": 2,
+          "mean_service_s": 120.0,
+          "energy_urgent_robot_ids": [],
+          "return_calendar": "conditional_on_existing_bookings",
+          "solver_called": true,
+          "raw_solver_status": "OPTIMAL",
+          "nonoptimal": false,
+          "timed_out": null,
+          "termination_reason": "optimal",
+          "backend": "cpsat",
+          "action_mode": "discrete",
+          "raw_action": 0,
+          "objective_weights": null
+        },
+        "commit": {
+          "accepted": [
+            {
+              "robot_id": 0,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 1,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 2,
+              "kind": "reposition",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 3,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 4,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 5,
+              "kind": "reposition",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 6,
+              "kind": "reposition",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 7,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 8,
+              "kind": "task",
+              "task_id": 0,
+              "port_id": null
+            }
+          ],
+          "rejected": [],
+          "snapshot_version": 10
+        },
+        "sim_time_s": 5.0,
+        "preparation_ms": 1.4718000020366162,
+        "policy_inference_ms": 0.0,
+        "commit_ms": 10.235199999442557,
+        "latency_accounted": true,
+        "budget_exceeded": false,
+        "advance_ms": 2.9732000002695713
+      }
+    },
+    {
+      "case": "arrival_during_parking_heuristic_1005",
+      "assessment": {
+        "failures": [],
+        "unverified": [],
+        "status": "DAT"
+      },
+      "assigned_at_s": 5.0,
+      "completed": 1,
+      "safety": 0.0,
+      "first_difference_time_s": 5,
+      "decision_at_5": {
+        "snapshot_version": 10,
+        "profile_id": 0,
+        "decisions": [
+          {
+            "robot_id": 8,
+            "kind": "task",
+            "task_id": 0,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              7,
+              6
+            ],
+            "estimated_energy_wh": 52.96766666666667,
+            "reason": "priority_age_nearest_feasible",
+            "metadata": {
+              "travel_m": 11.0,
+              "empty_travel_m": 7.0,
+              "pickup_eta_s": 15.5,
+              "expected_completion_s": 41.5,
+              "required_with_reserve_wh": 52.96766666666667,
+              "return_port_id": 2,
+              "return_eta_s": 122.5,
+              "return_calendar_start_s": 125.0
+            }
+          },
+          {
+            "robot_id": 0,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 1,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 2,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 3,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 4,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 5,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 6,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          },
+          {
+            "robot_id": 7,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "no_safe_heuristic_assignment",
+            "metadata": {}
+          }
+        ],
+        "solver_status": "HEURISTIC",
+        "solver_ms": 0.0,
+        "total_ms": 15.035400003398536,
+        "fallback_reason": null,
+        "objective": null,
+        "candidate_count": 18,
+        "metadata": {
+          "rejections": {
+            "payload": 8,
+            "robot_paused": 1
+          },
+          "action_mode": "discrete",
+          "raw_action": 0,
+          "objective_weights": null
+        },
+        "commit": {
+          "accepted": [
+            {
+              "robot_id": 8,
+              "kind": "task",
+              "task_id": 0,
+              "port_id": null
+            },
+            {
+              "robot_id": 0,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 1,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 2,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 3,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 4,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 5,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 6,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 7,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            }
+          ],
+          "rejected": [],
+          "snapshot_version": 10
+        },
+        "sim_time_s": 5.0,
+        "preparation_ms": 1.5380000004370231,
+        "policy_inference_ms": 0.0,
+        "commit_ms": 7.830600003217114,
+        "latency_accounted": true,
+        "budget_exceeded": false,
+        "advance_ms": 2.3512999978265725
+      }
+    },
+    {
+      "case": "arrival_during_parking_mappo_dispatch_1005",
+      "assessment": {
+        "failures": [],
+        "unverified": [],
+        "status": "DAT"
+      },
+      "assigned_at_s": 5.0,
+      "completed": 1,
+      "safety": 0.0,
+      "first_difference_time_s": 5,
+      "decision_at_5": {
+        "snapshot_version": 10,
+        "profile_id": null,
+        "decisions": [
+          {
+            "robot_id": 8,
+            "kind": "task",
+            "task_id": 0,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              7,
+              6
+            ],
+            "estimated_energy_wh": 52.96766666666667,
+            "reason": "eligible_task",
+            "metadata": {
+              "travel_m": 11.0,
+              "empty_travel_m": 7.0,
+              "pickup_eta_s": 15.5,
+              "expected_completion_s": 41.5,
+              "required_with_reserve_wh": 52.96766666666667,
+              "return_port_id": 2,
+              "return_eta_s": 122.5,
+              "return_calendar_start_s": 125.0
+            }
+          },
+          {
+            "robot_id": 0,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              6,
+              1
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {}
+          },
+          {
+            "robot_id": 1,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              7,
+              1
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {}
+          },
+          {
+            "robot_id": 2,
+            "kind": "reposition",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              19,
+              1
+            ],
+            "estimated_energy_wh": 21.613333333333333,
+            "reason": "eligible_reposition",
+            "metadata": {
+              "travel_m": 27.0
+            }
+          },
+          {
+            "robot_id": 3,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              12,
+              1
+            ],
+            "estimated_energy_wh": 0.0,
+            "reason": "hold_available",
+            "metadata": {}
+          },
+          {
+            "robot_id": 4,
+            "kind": "reposition",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": [
+              11,
+              1
+            ],
+            "estimated_energy_wh": 34.15833333333333,
+            "reason": "eligible_reposition",
+            "metadata": {
+              "travel_m": 28.0
+            }
+          },
+          {
+            "robot_id": 5,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "parking_conflict",
+            "metadata": {}
+          },
+          {
+            "robot_id": 6,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "parking_conflict",
+            "metadata": {}
+          },
+          {
+            "robot_id": 7,
+            "kind": "wait",
+            "task_id": null,
+            "port_id": null,
+            "target_soc": null,
+            "start_s": null,
+            "end_s": null,
+            "arrival_s": null,
+            "target_position": null,
+            "estimated_energy_wh": 0.0,
+            "reason": "parking_conflict",
+            "metadata": {}
+          }
+        ],
+        "solver_status": "ARBITRATED",
+        "solver_ms": 0.0,
+        "total_ms": 21.64420000190148,
+        "fallback_reason": null,
+        "objective": null,
+        "candidate_count": 18,
+        "metadata": {
+          "backend": "arbiter",
+          "solver_called": false,
+          "arbitration_rejections": [
+            {
+              "robot_id": 5,
+              "reason": "parking_conflict"
+            },
+            {
+              "robot_id": 6,
+              "reason": "parking_conflict"
+            },
+            {
+              "robot_id": 7,
+              "reason": "parking_conflict"
+            }
+          ],
+          "priority": "ascending SOC then robot ID",
+          "sampled_actions": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            3,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "action_mode": "multiagent",
+          "raw_action": [
+            0,
+            0,
+            1,
+            0,
+            1,
+            2,
+            3,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "objective_weights": null
+        },
+        "commit": {
+          "accepted": [
+            {
+              "robot_id": 8,
+              "kind": "task",
+              "task_id": 0,
+              "port_id": null
+            },
+            {
+              "robot_id": 0,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 1,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 2,
+              "kind": "reposition",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 3,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 4,
+              "kind": "reposition",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 5,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 6,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            },
+            {
+              "robot_id": 7,
+              "kind": "wait",
+              "task_id": null,
+              "port_id": null
+            }
+          ],
+          "rejected": [],
+          "snapshot_version": 10
+        },
+        "sim_time_s": 5.0,
+        "preparation_ms": 9.989700000005541,
+        "policy_inference_ms": 3.5045000004174653,
+        "commit_ms": 8.041600001888582,
+        "latency_accounted": true,
+        "budget_exceeded": false,
+        "advance_ms": 2.5021000001288485
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "source_hash": "6a65c6e57562b70b681c43032207d12e570a0b31fcffde541993723a6b34a44a",
+  "targeted_tests": 105,
+  "cases": [
+    {
+      "case": "delay_15_fixed_cpsat_1005",
+      "completed": 62,
+      "pending": 2,
+      "safety": 0.0,
+      "assessment": {
+        "failures": [],
+        "unverified": [
+          "solver_timeout_unknown"
+        ],
+        "status": "CHUA KIEM"
+      },
+      "local_fallback_cycles": 357,
+      "total_cycles": 360,
+      "first_local_time": 15.0
+    },
+    {
+      "case": "delay_15_heuristic_1005",
+      "completed": 62,
+      "pending": 2,
+      "safety": 0.0,
+      "assessment": {
+        "failures": [],
+        "unverified": [],
+        "status": "DAT"
+      },
+      "local_fallback_cycles": 357,
+      "total_cycles": 360,
+      "first_local_time": 15.0
+    },
+    {
+      "case": "delay_15_mappo_dispatch_1005",
+      "completed": 61,
+      "pending": 3,
+      "safety": 0.0,
+      "assessment": {
+        "failures": [],
+        "unverified": [],
+        "status": "DAT"
+      },
+      "local_fallback_cycles": 357,
+      "total_cycles": 360,
+      "first_local_time": 15.0
+    }
+  ],
+  "policy_observation_stays_delayed": true,
+  "physical_telemetry_is_current": true
+}

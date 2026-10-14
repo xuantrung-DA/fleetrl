@@ -88,9 +88,7 @@ def method_row(name: str) -> tuple[str, str, str, str, str, str]:
     train_done = sum(state.get("status") == "complete" for _, state in train_jobs)
     replicas = len(STUDY.training_seeds) if spec.learnable else 1
     test_expected = replicas * len(STUDY.scenarios_with_controls()) * len(STUDY.tape_seeds)
-    test_states = [
-        read_json(path) or {} for path in JOBS.glob(f"test_{name}_*/job.json")
-    ]
+    test_states = [read_json(path) or {} for path in JOBS.glob(f"test_{name}_*/job.json")]
     test_done = sum(state.get("status") == "complete" for state in test_states)
     preparation_states = [state for _, state in prep_jobs + train_jobs]
 
@@ -148,9 +146,7 @@ def show_status() -> None:
     rows = [method_row(name) for name in STUDY.methods]
     learners = [name for name in STUDY.methods if get_method(name).learnable]
     train_states = [
-        job_state(f"train_{name}_{seed}")
-        for name in learners
-        for seed in STUDY.training_seeds
+        job_state(f"train_{name}_{seed}") for name in learners for seed in STUDY.training_seeds
     ]
     train_done = sum(state.get("status") == "complete" for state in train_states)
     logged_total = sum(min(STUDY.total_timesteps, train_steps(state)) for state in train_states)

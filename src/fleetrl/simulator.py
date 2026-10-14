@@ -11,12 +11,13 @@ import hashlib
 import json
 from collections import deque
 from copy import deepcopy
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from math import ceil, isfinite
 
 from .config import FleetConfig
 from .energy import charge_duration, energy_for, reserve_wh, travel_time
 from .maps import make_map
+from .parking import interruptible_parking, task_dispatchable
 from .planner import GridPlanner, ReservationTable
 from .scenario import generate_tape, make_robots
 from .types import (
@@ -268,13 +269,23 @@ class Simulator:
 
     def _task_required_energy(self, robot: Robot, task: Task) -> float:
         c = self.config
+        remaining = (
+            robot.move_remaining_s
+            if (interruptible_parking(robot) and robot.move_to is not None)
+            else 0.0
+        )
+        origin = (
+            robot.move_to
+            if interruptible_parking(robot) and robot.move_to is not None
+            else robot.position
+        )
         a, b = (
-            self._distance(robot.position, task.pickup),
+            self._distance(origin, task.pickup),
             self._distance(task.pickup, task.dropoff),
         )
         if not isfinite(a + b):
             return float("inf")
-        service_end = self.time_s + travel_time(robot, a + b, c) + 2 * c.service_s
+        service_end = self.time_s + remaining + travel_time(robot, a + b, c) + 2 * c.service_s
         available = []
         for port in self.ports.values():
             if robot.kind not in port.compatible_kinds:
@@ -305,6 +316,7 @@ class Simulator:
                     c,
                 )
                 + reserve_wh(robot, c)
+                + c.auxiliary_power_w * remaining / 3600
             )
             available.append(needed)
         return min(available, default=float("inf"))
@@ -313,6 +325,14 @@ class Simulator:
         self, robot: Robot, decision: Decision, pending: list[ChargeBooking]
     ) -> str | None:
         c = self.config
+        ready_at = self.time_s
+        if interruptible_parking(robot) and robot.move_to is not None:
+            ready_at += robot.move_remaining_s
+            robot = replace(
+                robot,
+                position=robot.move_to,
+                battery_wh=robot.battery_wh - c.auxiliary_power_w * robot.move_remaining_s / 3600,
+            )
         port = self.ports.get(decision.port_id)
         if port is None or robot.kind not in port.compatible_kinds:
             return "incompatible_port"
@@ -323,7 +343,7 @@ class Simulator:
             return "invalid_charge_interval"
         arrival, start, end = map(float, values)
         if (
-            arrival < self.time_s - 1e-8
+            arrival < ready_at - 1e-8
             or start < arrival - 1e-8
             or end <= start
             or start - arrival > c.charger_wait_bound_s + 1e-8
@@ -355,9 +375,7 @@ class Simulator:
         if queue is None and robot.position != port.position:
             return "queue_full"
         if queue is not None:
-            queue_arrival = self.time_s + travel_time(
-                robot, self._distance(robot.position, queue), c
-            )
+            queue_arrival = ready_at + travel_time(robot, self._distance(robot.position, queue), c)
             if start - queue_arrival > c.charger_wait_bound_s + 1e-8:
                 return "physical_queue_wait_limit"
         return None
@@ -395,8 +413,21 @@ class Simulator:
             reason = global_reason
             if reason is None and (robot is None or robot.id in seen_robots):
                 reason = "unknown_or_duplicate_robot"
-            if reason is None and (
-                robot.status != "idle" or robot.move_to is not None or robot.task_id is not None
+            task_handoff = (
+                robot is not None and decision.kind == "task" and task_dispatchable(robot)
+            )
+            parking_hold = (
+                robot is not None and decision.kind == "wait" and interruptible_parking(robot)
+            )
+            charge_handoff = (
+                robot is not None and decision.kind == "charge" and interruptible_parking(robot)
+            )
+            if (
+                reason is None
+                and not (task_handoff or parking_hold or charge_handoff)
+                and (
+                    robot.status != "idle" or robot.move_to is not None or robot.task_id is not None
+                )
             ):
                 reason = "robot_busy"
             if reason is None and robot.paused_until_s > self.time_s:
@@ -415,7 +446,7 @@ class Simulator:
                     reason = "invalid_weight"
                 elif self._task_required_energy(robot, task) > robot.battery_wh + 1e-8:
                     reason = "insufficient_energy_or_charge_access"
-                elif self._path(robot.position, task.pickup) is None:
+                elif self._path(robot.move_to or robot.position, task.pickup) is None:
                     reason = "no_route"
             elif reason is None and decision.kind == "charge":
                 reason = self._valid_charge(robot, decision, [])
@@ -485,7 +516,8 @@ class Simulator:
                     decision.target_soc,
                     "to_charge_queue",
                 )
-                queue = self._choose_queue(robot, port)
+                queue_robot = replace(robot, position=robot.move_to) if robot.move_to else robot
+                queue = self._choose_queue(queue_robot, port)
                 if robot.position == port.position:
                     self._set_goal(robot, port.position)
                     robot.status = "to_charge_port"
@@ -496,6 +528,13 @@ class Simulator:
             elif decision.kind == "reposition":
                 robot.status = "reposition"
                 self._set_goal(robot, decision.target_position)
+            elif (
+                decision.kind == "wait"
+                and robot.status == "idle"
+                and robot.position not in self.warehouse.parking
+                and self._booking(robot) is None
+            ):
+                self._park_idle_blocker(robot, robot.id, reason="idle_parking")
             record = {
                 "robot_id": robot.id,
                 "kind": decision.kind,
@@ -528,6 +567,8 @@ class Simulator:
         robot.target_position = tuple(goal) if goal is not None else None
         robot.path = []
         robot.blocked_since_s = None
+        if robot.status in {"reposition", "charge_egress"}:
+            robot.metadata["parking_changed_at_s"] = self.time_s
 
     def _booking(self, robot: Robot) -> ChargeBooking | None:
         return next((b for b in self.bookings if b.robot_id == robot.id), None)
@@ -736,6 +777,34 @@ class Simulator:
             self._set_goal(robot, bay)
             self._log("energy_recovery_attempt", robot_id=robot.id, bay=bay)
 
+    def _endpoint_wait_cycle(self, robot: Robot) -> bool:
+        """Distinguish cyclic service leases from a queue behind an active owner."""
+        seen: set[int] = set()
+        current = robot
+        while current.id not in seen:
+            if (
+                current.status not in {"to_pickup", "to_dropoff"}
+                or current.paused_until_s > self.time_s
+                or current.target_position is None
+                or abs(current.position[0] - current.target_position[0])
+                + abs(current.position[1] - current.target_position[1])
+                > 3
+            ):
+                return False
+            seen.add(current.id)
+            owner = self.robots.get(self._endpoint_leases.get(current.target_position))
+            if (
+                owner is None
+                or owner.id == current.id
+                or owner.target_position == current.target_position
+                or abs(owner.position[0] - current.target_position[0])
+                + abs(owner.position[1] - current.target_position[1])
+                > 1
+            ):
+                return False
+            current = owner
+        return current.id == robot.id
+
     def _move(self, robot: Robot) -> None:
         c = self.config
         goal = robot.target_position
@@ -776,8 +845,18 @@ class Simulator:
                 and abs(robot.position[0] - goal[0]) + abs(robot.position[1] - goal[1]) <= 3
             ):
                 robot.metadata["endpoint_wait"] = True
-                robot.blocked_since_s = None
+                if self._endpoint_wait_cycle(robot):
+                    if robot.blocked_since_s is None:
+                        robot.blocked_since_s = self.time_s
+                else:
+                    robot.blocked_since_s = None
                 self._route_wait(robot)
+                if (
+                    not robot.metadata.get("energy_emergency")
+                    and robot.blocked_since_s is not None
+                    and self.time_s - robot.blocked_since_s >= c.deadlock_s
+                ):
+                    self._recover_deadlock(robot)
                 return
             robot.metadata.pop("endpoint_wait", None)
             # Proactively vacate an idle endpoint before approaching carriers
@@ -931,11 +1010,12 @@ class Simulator:
                         for_robot_id=robot.id,
                         bay=bay,
                     )
-        # Reorder/replan first. Second attempt diverts an unloaded robot to a
-        # free off-aisle bay and then restores the original operation.
+        # Reorder/replan first. A cyclic endpoint lease may also need a carrier
+        # to vacate the approach; its goods and original operation stay owned.
+        carrier_cycle = robot.load_kg > 0 and self._endpoint_wait_cycle(robot)
         if (
             attempts == 1
-            and robot.load_kg == 0
+            and (robot.load_kg == 0 or carrier_cycle)
             and robot.status not in {"to_charge_port", "charge_egress", "recovering"}
         ):
             occupied = {r.position for r in self.robots.values()} | {
@@ -946,9 +1026,28 @@ class Simulator:
                 for p in self.warehouse.parking
                 if p not in occupied and self._path(robot.position, p)
             ]
+            if carrier_cycle:
+                required = self._task_required_energy(robot, self.tasks[robot.task_id])
+                choices = [
+                    p
+                    for p in choices
+                    if required
+                    + energy_for(
+                        robot,
+                        2 * self._distance(robot.position, p),
+                        travel_time(robot, 2 * self._distance(robot.position, p), self.config),
+                        robot.load_kg,
+                        self.config,
+                    )
+                    <= robot.battery_wh
+                ]
             if choices:
                 bay = min(choices, key=lambda p: (self._distance(robot.position, p), p))
-                robot.metadata["recovery_goal"] = (robot.target_position, robot.status)
+                robot.metadata["recovery_goal"] = (
+                    (bay, "reposition")
+                    if robot.status == "reposition" and robot.task_id is None
+                    else (robot.target_position, robot.status)
+                )
                 self._set_goal(robot, bay)
                 robot.status = "recovering"
         self._log(
@@ -958,7 +1057,9 @@ class Simulator:
             goal=robot.target_position,
         )
 
-    def _park_idle_blocker(self, blocker: Robot, for_robot_id: int) -> bool:
+    def _park_idle_blocker(
+        self, blocker: Robot, for_robot_id: int, *, reason: str = "endpoint_blocker_yield"
+    ) -> bool:
         occupied = {r.position for r in self.robots.values()} | {
             r.target_position for r in self.robots.values()
         }
@@ -979,7 +1080,7 @@ class Simulator:
             return False
         blocker.status = "reposition"
         self._set_goal(blocker, bay)
-        self._log("endpoint_blocker_yield", robot_id=blocker.id, for_robot_id=for_robot_id, bay=bay)
+        self._log(reason, robot_id=blocker.id, for_robot_id=for_robot_id, bay=bay)
         return True
 
     def _arrived(self, robot: Robot) -> None:
@@ -1017,6 +1118,7 @@ class Simulator:
             if robot.status == "charge_egress":
                 self._release_port(robot)
             robot.status = "idle"
+            robot.metadata["parking_changed_at_s"] = self.time_s
 
     def _finish_service(self, robot: Robot) -> None:
         if robot.status == "pickup":

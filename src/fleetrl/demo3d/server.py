@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from .recordings import RecordingLibrary
 from .session import SessionManager
 
 
@@ -22,6 +23,7 @@ class DemoServer(ThreadingHTTPServer):
 
     def __init__(self, address, manager: SessionManager, web_root: Path):
         self.manager = manager
+        self.recordings = RecordingLibrary(manager.output, _repository_root() / "demo3d/samples")
         self.web_root = web_root
         super().__init__(address, DemoHandler)
 
@@ -59,6 +61,7 @@ class DemoHandler(BaseHTTPRequestHandler):
                     str(body.get("method", "heuristic")),
                     str(body.get("scenario", self.server.manager.default_scenario)).upper(),
                     int(body.get("seed", self.server.manager.default_seed)),
+                    record_only=body.get("record_only") is True,
                 )
                 self._json(session.status(), HTTPStatus.CREATED)
                 return
@@ -75,6 +78,19 @@ class DemoHandler(BaseHTTPRequestHandler):
         try:
             if parsed.path == "/api/bootstrap":
                 self._json(self.server.manager.bootstrap())
+                return
+            if parsed.path == "/api/recordings":
+                self._json(self.server.recordings.list())
+                return
+            if parsed.path == "/api/recording-window":
+                query = parse_qs(parsed.query)
+                self._json(
+                    self.server.recordings.window(
+                        query.get("id", [""])[0],
+                        float(query.get("start", ["0"])[0]),
+                        int(query.get("limit", ["120"])[0]),
+                    )
+                )
                 return
             if parsed.path == "/api/events":
                 self._events(parse_qs(parsed.query).get("session", [None])[0])

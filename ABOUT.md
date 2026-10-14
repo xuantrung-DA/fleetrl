@@ -207,13 +207,19 @@ Profile chỉ đổi mục tiêu mềm. Không profile nào được tắt kiể
 
 ### Tối ưu joint và các hiệu chỉnh so proposal
 
+Robot có `paused_until_s > snapshot.sim_time_s` bị loại khỏi cả ứng viên dispatch và danh sách khẩn năng lượng; tại đúng thời điểm hết pause, robot được xét lại bình thường. Guard `robot_paused` của simulator vẫn kiểm tra khi commit để bảo vệ trường hợp snapshot cũ.
+
+Simulator phân biệt hàng chờ service bình thường với chu kỳ lease endpoint: nếu các robot giữ lease của endpoint đối nhau và cùng phải chờ, thời gian bị chặn được giữ để kích hoạt deadlock recovery theo `deadlock_s` hiện có. Owner đang service hoặc pause không bị coi là chu kỳ này. Robot đang chở hàng chỉ được tạm rút sang bay khi là thành viên chu kỳ và pin đủ cho yêu cầu năng lượng ban đầu cộng hành trình khứ hồi với tải; task/hàng/goal được giữ để tiếp tục sau khi nhường. Không tăng `route_wait_bound_s` hoặc đổi cách đếm safety incident.
+
+Khi observation của policy quá `stale_after_s` (mặc định 10 s), `FleetEnv` có fallback heuristic cục bộ: dùng telemetry vật lý mới của robot/cổng/đường, nhưng chỉ xét task ID đã có trong snapshot trễ và giữ demand estimate trễ. Policy vẫn nhận observation trễ; action của policy không được dùng trong chu kỳ này. Plan ghi `stale_snapshot_local_fallback`, tuổi observation, thời điểm telemetry và task allowlist. Commit vẫn kiểm freshness, tải, pin, booking và đường như cũ; không chấp nhận plan mang version cũ. Nếu inference đã hết budget thì không chạy fallback. Đây là giả định kiến trúc có bộ điều khiển cục bộ nhận telemetry mới; không chứng minh hệ thống chạy được khi cả telemetry vật lý cũng mất. Kết quả ở delay lớn phải ghi rõ fallback, không quy công phục vụ cho learner.
+
 `FleetOptimizer.generate_candidates()` tạo lựa chọn riêng cho robot rảnh: task đủ tải/pin, sạc tới cổng tương thích, reposition tới parking hoặc wait. Shortlist task bảo vệ đơn gấp/già và xoay phần còn lại theo robot ID để mọi robot không cùng nhìn đúng sáu task đầu tiên. Một robot chọn đúng một ứng viên; một task và một điểm đỗ có tối đa một robot chọn. CP-SAT dùng optional charging intervals với NoOverlap theo cổng và Cumulative cho khoảng chờ theo trạm. Start đặt trên lưới decision_s; thời điểm kết thúc không bị cắt ở charging_horizon_s. Solver dùng một worker, hint từ heuristic và tắt presolve theo phép đo tích hợp; trạng thái FEASIBLE có nghiệm dùng được nhưng chưa chứng minh optimal. Trong v2, FEASIBLE/UNKNOWN không tự xác định timeout; `timed_out` để null khi không biết nguyên nhân dừng, còn trạng thái chưa optimal được báo riêng trong M13.
 
 Chi phí cộng của mỗi ứng viên là `(-4×is_task + wT×tardiness/600 + wE×energy/100 + 0,3×duration/900 − wG×useful_gain/100) / N`. N là toàn bộ số robot. Chi phí chờ sạc và slack thiếu lực lượng/cân vùng cũng chuẩn hóa theo N. **Mọi thành phần cộng đều chia cho quy mô đội** để tránh chỉ thưởng giao việc/N nhưng thưởng tích pin nguyên tổng, khiến đội lớn đồng loạt sạc. Hệ số chi phí được nhân **1.000.000** khi đưa vào CP-SAT, thay vì 1.000 trong proposal, để không làm tròn mất chi phí nhỏ theo tick/robot.
 
 Tardiness của ứng viên dùng phần trễ tăng thêm sau thời điểm hiện tại, trừ pressure theo tuổi/deadline, có trọng số ưu tiên. Trừ trễ đã xảy ra giúp đơn quá hạn không trở thành việc “làm gì cũng đắt” rồi bị để lại mãi. Đây là surrogate có chủ đích, khác tổng tardiness thật dùng báo cáo. Readiness dùng nhu cầu 60 s đã qua và thời gian từ giao đến hoàn tất của các task kết thúc trong cửa sổ 60 s; nếu chưa có task hoàn tất thì dùng 120 s. Backlog đang chờ là cận dưới cho nhu cầu lực lượng. Proxy/cửa sổ này vẫn cần calibration.
 
-Năng lượng tăng tới 80% được tính đủ; phần từ 80% tới 95% chỉ có giá trị 0,3 lần trong objective. Ứng viên sạc phải tăng tối thiểu 5% dung lượng để tránh chu kỳ sạc rất nhỏ như 79,9→80%. Độ khẩn năng lượng xét đi tới cổng + reserve + dự trù 300 s chờ đường + max(300 s chờ cổng, lịch mở hiện có), kèm buffer can thiệp 10% dung lượng. Robot rảnh thuộc diện khẩn ngừng nhận task/reposition; sạc chủ động của robot khỏe nhường trước cho chúng. Với advanced charging, lượt khẩn ưu tiên hồi tới 60% để nhả cổng; B0/A theo ngưỡng vẫn dùng 95%. Các guard này giống nhau ở B1/H và không sửa reward RL. Khi lập ứng viên sạc, `arrival_s` ban đầu là ETA sớm nhất tới ô chờ; earliest port start dùng đường qua các ô chờ có thể chọn, không dùng shortcut thẳng tới cổng. Energy admission cũng tính hành trình qua queue. Lịch dùng margin `min(30 s, 10% charger_wait_bound_s)` — mặc định plan tối đa 270 s chờ, physical guard vẫn 300 s. Nếu calendar repair đã dự đoán chờ quá giới hạn, booking được hủy có reason và robot thử rút về ô đỗ; booking hủy vẫn nằm trong lịch sử/KPI.
+Năng lượng tăng tới 80% được tính đủ; phần từ 80% tới 95% chỉ có giá trị 0,3 lần trong objective. Ứng viên sạc phải tăng tối thiểu 5% dung lượng để tránh chu kỳ sạc rất nhỏ như 79,9→80%. Độ khẩn năng lượng xét đi tới cổng + reserve + dự trù 300 s chờ đường + max(300 s chờ cổng, lịch mở hiện có), kèm buffer can thiệp 10% dung lượng. Robot rảnh thuộc diện khẩn ngừng nhận task/reposition; sạc chủ động của robot khỏe nhường trước cho chúng. Với advanced charging, lượt khẩn ưu tiên hồi tới 60% để nhả cổng; Heuristic B0 và advanced charging dùng đích nhỏ nhất trong `charge_targets` (mặc định 60%) khi còn backlog, hoặc khi ca có `demand_per_hour>0` và đã quan sát task; giữ quy tắc này trong khoảng trống giữa hai đợt đơn để tránh lịch sạc dài khóa cổng. Khi chưa quan sát đơn hoặc ca không có demand/backlog, advanced giữ tập đích cũ và heuristic dùng 95%. PPO threshold ablation vẫn khóa đích 95%. Quy tắc chỉ dùng config và task đã quan sát, không đọc trước tape. Các guard này giống nhau ở B1/H và không sửa reward RL. Khi lập ứng viên sạc, `arrival_s` ban đầu là ETA sớm nhất tới ô chờ; earliest port start dùng đường qua các ô chờ có thể chọn, không dùng shortcut thẳng tới cổng. Energy admission cũng tính hành trình qua queue. Lịch dùng margin `min(30 s, 10% charger_wait_bound_s)` — mặc định plan tối đa 270 s chờ, physical guard vẫn 300 s. Nếu calendar repair đã dự đoán chờ quá giới hạn, booking được hủy có reason và robot thử rút về ô đỗ; booking hủy vẫn nằm trong lịch sử/KPI.
 
 Khi kiểm task, solver tìm **bằng chứng có slot về sạc theo calendar hiện tại**, không đặt trước một cổng vĩnh viễn cho task đó. Các quyết định online sau đó có thể thay calendar; simulator phải recheck và ghi sự cố nếu giả định mất hiệu lực.
 
@@ -224,6 +230,41 @@ Khi kiểm task, solver tìm **bằng chứng có slot về sạc theo calendar 
 Static route dùng reverse BFS cache và đường vòng có A*. Khi contention, timed A* xét tối đa 60 s rồi thực thi/kiểm lại từng cạnh; prefix đường vòng được giữ qua các tick để tránh quay lại static route và lắc qua lại. **Không commit nguyên tử cả route 5 s của toàn đội** như thiết kế mạnh hơn trong proposal. Admission task/booking và execution guard vẫn tách khỏi PPO; bảo đảm cục bộ của reservation không phải bằng chứng tồn tại đường đi toàn cục.
 
 Pickup/dropoff có endpoint lease: chỉ một robot tiếp cận cuối, các robot khác đợi ngoài vùng tiếp cận; idle blocker có thể được đẩy sang parking để nhả endpoint. Đây là hàng chờ dịch vụ có quản lý, khác deadlock không tiến triển. Mọi route wait vẫn tính vào giới hạn cấu hình; nếu vượt giả định, ghi energy_emergency và can thiệp.
+
+**Ổn định điểm đỗ (13/10/2026):** `parking.py:parking_rejection` lọc ứng viên
+reposition dùng chung cho mọi method. Robot ở ô đỗ hợp lệ chỉ được đổi vùng
+khi mức giảm lệch đội theo backlog và tốc độ đơn đã đến, trừ chi phí di chuyển,
+vượt `parking_min_improvement=0.02` và đã ở điểm đỗ ít nhất
+`parking_min_residence_s=60`. Các đích đỗ đang cam kết được giữ khỏi shortlist
+của robot khác. `task_dispatchable` cho robot đang đi đỗ, không mang hàng,
+không có task/booking và không recovery khẩn, nhận task ở chu kỳ kế tiếp.
+Sạc bắt buộc theo ngưỡng hoặc energy urgency cũng được thay goal parking;
+robot khỏe đang đi đỗ không có thêm lựa chọn sạc chủ động. Cạnh đang di chuyển
+và reservation vẫn giữ nguyên tới khi hoàn tất; ETA và admission năng lượng
+tính từ đích cạnh, cộng thời gian/phụ tải nền còn lại. Heuristic giữ lựa chọn
+idle khả thi trước khi dùng robot đi đỗ làm năng lực bổ sung. Cam kết đỗ chỉ
+ngăn đổi qua lại các bay. Không có nhu cầu thì robot đã đỗ giữ nguyên
+vị trí. Chi phí reposition trả ít nhất phụ tải nền của một decision interval,
+để chuyến đi ngắn không rẻ hơn wait chỉ vì thời lượng được tính ngắn hơn.
+
+Nếu plan chọn wait trong khi robot rảnh đang ở ngoài parking và không có
+booking, simulator đưa robot tới bay trống gần nhất (khoảng cách, rồi tọa độ),
+ghi event `idle_parking`. Endpoint/deadlock yield vẫn được phép nhường đường.
+Khi diversion chỉ phục vụ reposition rảnh, bay tránh trở thành điểm đỗ mới;
+task đang cam kết vẫn khôi phục goal cũ. Arrival xóa goal/path và trả idle,
+chỉ tiêu phụ tải nền 12 W. Các field mới nằm trong `env` của YAML; không đổi
+schema observation/action, reward hoặc 16 nhóm metrics.
+
+Script `scripts/diagnose_idle_motion.py` ghi tick, goal source/file line,
+decision, profile, đường rảnh theo nguyên nhân và chu kỳ A→B→A vào run mới.
+Bằng chứng của đợt sửa ở `runs/idle_parking_20261013/`; kết quả nghiệm thu và
+giới hạn so sánh phải đọc trong `REPORT.md` của run đó. Checkpoint cũ vẫn nạp
+được về mặt shape nhưng tập ứng viên/dynamics đã thay đổi; không gộp số liệu
+mới với study14 hoặc coi các báo cáo trước sửa là bằng chứng cho source mới.
+Chẩn đoán hồi quy tồn đơn, ablation và nghiệm thu trên seed validation
+1000–1004 ở `runs/dispatch_regression_20261013/REPORT.md`; dữ liệu per-task,
+per-cycle và lịch sạc nằm trong từng case. Các đối chứng dùng checkpoint
+MAPPO cũ, không train/finetune và không thay observation/reward.
 
 Khi lỗi năng lượng, simulator giữ hàng đã lấy, trả task chưa lấy về backlog, hủy booking tương lai phù hợp và thử di chuyển vật lý về ô đỗ có đủ pin; nếu không thể thì HOLD tại vị trí. Chỉ ở recovery khẩn mới được dùng phần dự phòng còn lại để rút về ô đỗ; việc đó đã mang cờ vi phạm/can thiệp, không được gọi là kế hoạch bình thường thành công. `emergency_parking` hiện ánh xạ về mã cuối trong observation status; xem metadata/event log để phân biệt nguyên nhân.
 
@@ -291,12 +332,14 @@ Phần inventory bên dưới được tạo từ AST của source tại thời 
 | `src/fleetrl/metrics.py` | KPI có censoring, safety/energy/deadline/group metrics và latency. |
 | `src/fleetrl/observations.py` | Observation space cố định, shortlist/mask và feature scaling. |
 | `src/fleetrl/optimizer.py` | Sinh/lọc ứng viên; 6 profile; CP-SAT task+charge+reposition+wait; heuristic fallback. |
+| `src/fleetrl/parking.py` | Guard lợi ích/lưu trú điểm đỗ và eligibility chung cho task preempt parking an toàn. |
 | `src/fleetrl/planner.py` | Shortest/time-space path và reservation vật lý ô/cạnh. |
 | `src/fleetrl/rl.py` | Entity encoder, PPO factory/training, curriculum mixing, validation checkpoint, load/resume/evaluate. |
 | `src/fleetrl/scenario.py` | Khởi tạo 3 loại robot, sinh task/sự cố Poisson, event tape, 9 scenario. |
 | `src/fleetrl/simulator.py` | Trạng thái sống, event/tick, nhận plan, task/service/charge lifecycle, recovery, occupancy audit. |
 | `src/fleetrl/types.py` | Schema chung robot/task/port/snapshot/plan/tape. |
 | `src/fleetrl/ui.py` | Pygame dashboard LIVE/REPLAY, control, render và sự kiện demo ghi tape. |
+| `src/fleetrl/demo3d/recordings.py` | Thư viện bản ghi viewer 3D: danh sách phiên trên đĩa, chỉ mục thời gian/byte-offset, đọc từng đoạn 2–240 frame; không chạy simulator. |
 | `scripts/train_seeds.py` | Chạy train tuần tự cho nhiều seed bằng subprocess cùng Python; flag ablation; dừng nếu có run lỗi. |
 | `configs/train.yaml`, `train_20.yaml`, `mlp.yaml`, `smoke.yaml` | Preset tham chiếu, 20 robot, MLP ablation và pipeline nhỏ. |
 | `requirements.txt` | Khóa dependency trực tiếp đã kiểm, cài package editable và pytest. |
@@ -307,6 +350,16 @@ Phần inventory bên dưới được tạo từ AST của source tại thời 
 | `docs/CONTRACTS.md` | Hợp đồng ghép các module. |
 | `docs/rl_architecture.md` | Lý do PPO/entity architecture, tài liệu nguồn, protocol/giới hạn. |
 | `docs/proposal_traceability.md` | Mapping F01–F23, thay đổi thiết kế có chủ đích và giới hạn thực nghiệm. |
+
+**Demo 3D — chạy trước và phát lại (14/10/2026):** LIVE vẫn giữ nguyên.
+`DemoSession(record_only=True)` ghi mọi tick vật lý nhưng bỏ chờ thời gian thực,
+không phát frame để render đồng thời; source hash lưu trong replay header,
+trạng thái kết thúc lưu tại `recording.json`. Sau khi chạy xong, frontend mở
+replay, hỗ trợ phát/tạm dừng/tốc độ/tua. Thư viện đọc lại bản ghi qua restart,
+không phụ thuộc session còn trong RAM. `recorded.ts` tải cửa sổ 120 frame;
+`installReplayWindow` thay cửa sổ và giữ vị trí phát, API tối đa 240 frame/request.
+Bản ghi cũ thiếu metadata có nhãn riêng, không mặc định hoàn tất. Đây là
+playback dữ liệu của simulator, không tính lại planner/năng lượng/KPI.
 
 ### Nên sửa ở đâu trước?
 
@@ -578,6 +631,7 @@ Phần inventory bên dưới được tạo từ AST của source tại thời 
 | `Simulator._consume` (function) | Trừ pin không âm; cộng consumed Wh; ghi reserve violation/emergency. |
 | `Simulator._energy_emergency` (function) | Ghi can thiệp, giữ hàng; trả task chưa lấy về backlog, hủy booking phù hợp; thử emergency parking đủ pin hoặc HOLD. |
 | `Simulator._move` (function) | Giữ endpoint lease, tránh cổng không đích, kiểm corridor direction và next-leg reservation; giữ detour prefix; kiểm reserve và route wait. |
+| `Simulator._endpoint_wait_cycle` (function) | Nhận diện chu kỳ owner/lease đang chờ nhau; loại owner đang service hoặc pause khỏi chu kỳ. |
 | `Simulator._route_wait` (function) | Tích lũy thời gian chờ đường theo tick; vượt bound kích hoạt energy emergency. |
 | `Simulator._recover_deadlock` (function) | Thử replan/yield tới ô tránh có giới hạn; giữ nhiệm vụ hoặc ghi unresolved HOLD. |
 | `Simulator._park_idle_blocker` (function) | Chọn ô đỗ đủ pin/đường để nhả endpoint hoặc queue đang bị robot rảnh giữ. |
@@ -675,6 +729,8 @@ Phần inventory bên dưới được tạo từ AST của source tại thời 
 | `charger_wait_bound_s` | `float` | `300.0` |
 | `charging_horizon_s` | `float` | `900.0` |
 | `deadlock_s` | `float` | `30.0` |
+| `parking_min_improvement` | `float` | `0.02` |
+| `parking_min_residence_s` | `float` | `60.0` |
 | `observation_delay_s` | `float` | `0.0` |
 | `stale_after_s` | `float` | `10.0` |
 | `max_tasks_observed` | `int` | `40` |

@@ -24,6 +24,7 @@ from ortools.sat.python import cp_model
 
 from .config import FleetConfig
 from .energy import charge_duration, energy_for, reserve_wh, travel_time
+from .parking import interruptible_parking, parking_rejection, task_dispatchable
 from .types import Cell, Decision, DecisionPlan, Robot, Snapshot, Task
 
 COST_SCALE = 1_000_000
@@ -249,6 +250,17 @@ class FleetOptimizer:
         self, snapshot: Snapshot, robot: Robot, task: Task, occupied: dict
     ) -> Candidate | None:
         cfg, now = self.config, snapshot.sim_time_s
+        remaining = 0.0
+        committed_edge_m = 0.0
+        if interruptible_parking(robot) and robot.move_to is not None:
+            remaining = robot.move_remaining_s
+            committed_edge_m = 1.0
+            robot = replace(
+                robot,
+                position=robot.move_to,
+                battery_wh=robot.battery_wh - cfg.auxiliary_power_w * remaining / 3600,
+            )
+            now += remaining
         if task.weight_kg > robot.payload_capacity_kg:
             self._reject("payload")
             return None
@@ -309,20 +321,26 @@ class FleetOptimizer:
             "task",
             task_id=task.id,
             target_position=task.pickup,
-            estimated_energy_wh=required,
+            estimated_energy_wh=required + cfg.auxiliary_power_w * remaining / 3600,
             reason="eligible_task",
             metadata={
-                "travel_m": empty + loaded,
-                "empty_travel_m": empty,
+                "travel_m": committed_edge_m + empty + loaded,
+                "empty_travel_m": committed_edge_m + empty,
+                "pickup_eta_s": now + empty_t,
                 "expected_completion_s": now + duration,
-                "required_with_reserve_wh": required,
+                "required_with_reserve_wh": required + cfg.auxiliary_power_w * remaining / 3600,
                 "return_port_id": return_port,
                 "return_eta_s": return_eta,
                 "return_calendar_start_s": return_start,
             },
         )
         return Candidate(
-            decision, duration, use, tardiness_s=tardiness, zone=task.zone, available=True
+            decision,
+            duration + remaining,
+            use + cfg.auxiliary_power_w * remaining / 3600,
+            tardiness_s=tardiness,
+            zone=task.zone,
+            available=True,
         )
 
     def _charge_candidates(
@@ -336,6 +354,17 @@ class FleetOptimizer:
         if not allow_charge:
             return []
         cfg, now = self.config, snapshot.sim_time_s
+        remaining = 0.0
+        committed_edge_m = 0.0
+        if interruptible_parking(robot) and robot.move_to is not None:
+            remaining = robot.move_remaining_s
+            committed_edge_m = 1.0
+            robot = replace(
+                robot,
+                position=robot.move_to,
+                battery_wh=robot.battery_wh - cfg.auxiliary_power_w * remaining / 3600,
+            )
+            now += remaining
         result = []
         for port in snapshot.ports:
             if robot.kind not in port.compatible_kinds:
@@ -423,10 +452,11 @@ class FleetOptimizer:
                     target_soc=target,
                     arrival_s=eta * cfg.tick_s,
                     target_position=port.position,
-                    estimated_energy_wh=use + cfg.auxiliary_power_w * extra_wait / 3600,
+                    estimated_energy_wh=use
+                    + cfg.auxiliary_power_w * (extra_wait + remaining) / 3600,
                     reason="eligible_charge",
                     metadata={
-                        "travel_m": distance,
+                        "travel_m": committed_edge_m + distance,
                         "lower_bound_arrival_wh": lower_energy,
                         "queue_arrival_lower_bound_s": queue_arrival_s,
                         "port_arrival_upper_bound_s": port_arrival_s,
@@ -437,8 +467,8 @@ class FleetOptimizer:
                 result.append(
                     Candidate(
                         decision,
-                        travel_s + duration_s,
-                        use,
+                        travel_s + duration_s + remaining,
+                        use + cfg.auxiliary_power_w * remaining / 3600,
                         gain_wh=useful_gain,
                         zone=snapshot.warehouse.zone_of(port.position),
                         available=False,
@@ -462,8 +492,8 @@ class FleetOptimizer:
         self._urgent_ids = {
             r.id
             for r in snapshot.robots
-            if r.status == "idle"
-            and r.task_id is None
+            if task_dispatchable(r)
+            and r.paused_until_s <= snapshot.sim_time_s
             and self._energy_urgent(snapshot, r, occupied)
         }
         waiting = [
@@ -471,6 +501,15 @@ class FleetOptimizer:
             for t in snapshot.tasks
             if t.status in {"waiting", "blocked"} and t.created_s <= snapshot.sim_time_s
         ]
+        # An active demand shift continues between arrivals once work was seen.
+        # Do not lock ports with a full charge during a temporary backlog gap.
+        ongoing_demand = bool(waiting) or (cfg.demand_per_hour > 0 and bool(snapshot.tasks))
+        # The locked-threshold PPO ablation still uses 95%.
+        threshold_targets = (
+            (min(cfg.charge_targets),)
+            if cfg.controller == "heuristic" and ongoing_demand
+            else (0.95,)
+        )
         # Keep urgent/deadline and oldest candidates together under the40 cap.
         priority = sorted(waiting, key=lambda t: (-t.priority, t.deadline_s, t.created_s, t.id))
         oldest = sorted(waiting, key=lambda t: (t.created_s, t.deadline_s, t.id))
@@ -480,9 +519,14 @@ class FleetOptimizer:
                 if i < len(ordered) and len(shortlist) < cfg.max_tasks_observed:
                     shortlist[ordered[i].id] = ordered[i]
         result: list[Candidate] = []
-        positions = {r.position for r in snapshot.robots}
+        positions = {r.position for r in snapshot.robots} | {
+            r.target_position for r in snapshot.robots if r.target_position is not None
+        }
         for robot in sorted(snapshot.robots, key=lambda r: r.id):
-            if robot.status != "idle" or robot.task_id is not None:
+            if not task_dispatchable(robot):
+                continue
+            if robot.paused_until_s > snapshot.sim_time_s:
+                self._reject("robot_paused")
                 continue
             if snapshot.sim_time_s - robot.observed_at_s > cfg.stale_after_s:
                 self._reject("stale_robot")
@@ -520,7 +564,43 @@ class FleetOptimizer:
                 # Threshold ablation has genuine locked charge timing, not merely
                 # a95% candidate competing against tasks in the learned objective.
                 task_candidates = []
-            targets = (0.95,) if threshold_mode else cfg.charge_targets
+            if interruptible_parking(robot):
+                parking_charges = []
+                if (threshold_mode and due_charge) or urgent:
+                    parking_targets = (
+                        threshold_targets if threshold_mode else (min(cfg.charge_targets),)
+                    )
+                    parking_charges = self._charge_candidates(
+                        snapshot,
+                        robot,
+                        occupied,
+                        True,
+                        parking_targets,
+                    )
+                if not task_candidates and not parking_charges:
+                    continue
+                result.extend(task_candidates)
+                result.extend(parking_charges)
+                ready = robot.battery_wh > (
+                    reserve_wh(robot, cfg) + cfg.auxiliary_power_w * 600 / 3600
+                )
+                result.append(
+                    Candidate(
+                        Decision(robot.id, "wait", reason="continue_parking"),
+                        duration_s=cfg.decision_s,
+                        energy_wh=cfg.auxiliary_power_w * cfg.decision_s / 3600,
+                        available=ready and not urgent and not (threshold_mode and due_charge),
+                        zone=snapshot.warehouse.zone_of(robot.position),
+                    )
+                )
+                continue
+            targets = (
+                threshold_targets
+                if threshold_mode
+                else (min(cfg.charge_targets),)
+                if ongoing_demand
+                else cfg.charge_targets
+            )
             if urgent and not threshold_mode:
                 # Recover enough energy promptly, freeing scarce ports for the
                 # other critical robots before elective longer sessions resume.
@@ -568,6 +648,8 @@ class FleetOptimizer:
                     continue
                 distance = self._distance(snapshot, robot.position, cell)
                 if not isfinite(distance):
+                    continue
+                if parking_rejection(snapshot, robot, cell, distance, cfg) is not None:
                     continue
                 travel_s = travel_time(robot, distance, cfg)
                 use = energy_for(robot, distance, travel_s, 0.0, cfg)
@@ -621,10 +703,17 @@ class FleetOptimizer:
         return result
 
     def _candidate_cost(self, candidate: Candidate, profile: ObjectiveProfile, n: int) -> float:
+        duration = candidate.duration_s
+        energy = candidate.energy_wh
+        if candidate.decision.kind == "reposition":
+            # A short trip still pays the remaining decision interval's idle draw.
+            extra = max(0.0, self.config.decision_s - duration)
+            duration += extra
+            energy += self.config.auxiliary_power_w * extra / 3600
         cost = -4.0 if candidate.decision.kind == "task" else 0.0
         cost += profile.tardiness * candidate.tardiness_s / 600
-        cost += profile.energy * candidate.energy_wh / 100
-        cost += 0.3 * candidate.duration_s / 900
+        cost += profile.energy * energy / 100
+        cost += 0.3 * duration / 900
         cost -= profile.gain * candidate.gain_wh / 100
         if candidate.decision.kind == "charge" and candidate.decision.robot_id in self._urgent_ids:
             # A physical intervention priority: profiles cannot trade an imminent
@@ -653,6 +742,9 @@ class FleetOptimizer:
         cfg = self.config
         occupied, queues = self._calendars(snapshot)
         robots = {r.id: r for r in snapshot.robots}
+        has_work_demand = any(t.status in {"waiting", "blocked"} for t in snapshot.tasks) or (
+            cfg.demand_per_hour > 0 and bool(snapshot.tasks)
+        )
         decisions: dict[int, Decision] = {}
         used_tasks: set[int] = set()
         by_robot: dict[int, list[Candidate]] = {}
@@ -677,7 +769,12 @@ class FleetOptimizer:
             for candidate in options:
                 if candidate.decision.kind != "charge":
                     continue
-                if candidate.decision.target_soc != 0.95 and rid not in self._urgent_ids:
+                if (
+                    candidate.decision.target_soc != 0.95
+                    and rid not in self._urgent_ids
+                    and cfg.controller != "heuristic"
+                    and not (cfg.advanced_charging and has_work_demand)
+                ):
                     continue
                 start = earliest_slot(
                     candidate.earliest_tick,
@@ -729,6 +826,21 @@ class FleetOptimizer:
                         c.decision.robot_id,
                     ),
                 )
+                if interruptible_parking(robots[best.decision.robot_id]):
+                    # Preserve an already available dispatch before interrupting
+                    # another robot's relocation. Parking fills unmet task capacity.
+                    idle_options = [
+                        c for c in options if robots[c.decision.robot_id].status == "idle"
+                    ]
+                    if idle_options:
+                        best = min(
+                            idle_options,
+                            key=lambda c: (
+                                c.decision.metadata["empty_travel_m"],
+                                c.duration_s,
+                                c.decision.robot_id,
+                            ),
+                        )
                 decisions[best.decision.robot_id] = replace(
                     best.decision, reason="priority_age_nearest_feasible"
                 )
@@ -870,7 +982,8 @@ class FleetOptimizer:
         ]
         mean_service = sum(recent_service) / len(recent_service) if recent_service else 120.0
         work_count = sum(
-            r.port_id is None and (r.task_id is not None or r.status == "reposition")
+            r.port_id is None
+            and (r.task_id is not None or (r.status == "reposition" and not task_dispatchable(r)))
             for r in snapshot.robots
         )
         required = min(n, max(len(backlog), int(ceil(sum(rates) * mean_service))))
@@ -890,7 +1003,10 @@ class FleetOptimizer:
                 current_work = sum(
                     snapshot.warehouse.zone_of(r.position) == zone
                     and r.port_id is None
-                    and (r.task_id is not None or r.status == "reposition")
+                    and (
+                        r.task_id is not None
+                        or (r.status == "reposition" and not task_dispatchable(r))
+                    )
                     for r in snapshot.robots
                 )
                 count = current_work + sum(

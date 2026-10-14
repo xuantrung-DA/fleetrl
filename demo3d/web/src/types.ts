@@ -81,6 +81,7 @@ export interface SessionStatus {
   error: string | null;
   replay: string;
   time_s: number;
+  record_only?: boolean;
 }
 
 export interface Bootstrap {
@@ -95,4 +96,23 @@ export interface ReplayHeader {
   type: "header";
   map: MapData;
   session: SessionStatus;
+}
+
+export interface SavedRecording {
+  id: string;
+  method: string;
+  scenario: string;
+  seed: number;
+  status: 'complete' | 'stopped' | 'legacy';
+  bytes: number;
+  source_hash: string | null;
+}
+
+export interface RecordingWindow {
+  header: ReplayHeader;
+  frames: Frame[];
+  start_s: number;
+  end_s: number;
+  total_frames: number;
+  has_more: boolean;
 }

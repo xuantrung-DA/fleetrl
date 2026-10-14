@@ -1,0 +1,17 @@
+{
+  "source": "runs/demo3d/748f38c95f4e/replay.jsonl",
+  "source_session_id": "748f38c95f4e",
+  "method": "mappo_dispatch",
+  "scenario": "S4",
+  "seed": 1001,
+  "status": "complete",
+  "modified": false,
+  "duration_s": 3600.0,
+  "frames": 7201,
+  "source_hash": "d6abb0170eff6edfd13b6a9ee874c7b69ec8e56776c10e44a2d14695123a2dc8",
+  "raw_bytes": 266197891,
+  "gzip_bytes": 31888381,
+  "raw_sha256": "79e47d5a31ee650387a95cccec82e570185dc859429ae0624579cdadd5e617df",
+  "gzip_sha256": "87ee7219a991a103eb0d06432385245f9036df058269e2a7e3757cf6070eb9f6",
+  "normalization": "None; gzip contains every original byte, including historical header"
+}

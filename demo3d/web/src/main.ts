@@ -1,6 +1,7 @@
 import { viewer, resetLive, pickCell, setLivePlayback } from './original-viewer.js';
 import { controlSession, createSession, getBootstrap } from './api';
-import type { Frame, MapData, ReplayHeader, SessionStatus } from './types';
+import type { Frame, MapData, SessionStatus } from './types';
+import { createRecordedPlayer, listRecordings } from './recorded';
 
 function element<T extends HTMLElement>(id: string): T {
   const node = document.getElementById(id);
@@ -15,6 +16,11 @@ panel.innerHTML = `<h2>PHIÊN FLEETRL · LIVE</h2>
 <label>Seed <input id="seed" type="number" value="2000" style="width:80px"></label>
 <p><button id="start">Bắt đầu</button> <button id="pause" disabled>Tạm dừng</button>
 <button id="stop" disabled>Dừng</button></p>
+<p><button id="record">Chạy trước và lưu</button></p>
+<small>Chạy hết mô phỏng rồi xem; không huấn luyện lại.</small>
+<h3>PHIÊN ĐÃ LƯU</h3>
+<select id="saved" aria-label="Bản ghi đã lưu"></select>
+<p><button id="refreshSaved">Làm mới</button> <button id="openSaved">Mở replay</button></p>
 <p><button id="urgent" disabled>Thêm 5 đơn gấp</button>
 <button id="block" disabled>Chặn ô</button> <button id="unblock" disabled>Mở ô</button></p>
 <button id="replay" disabled>Xem lại phiên</button>
@@ -31,6 +37,19 @@ let source: EventSource | null = null;
 let map: MapData | undefined;
 let pickMode: 'block' | 'unblock' | null = null;
 const decisions: string[] = [];
+const recordedPlayer = createRecordedPlayer(message);
+const saved = element<HTMLSelectElement>('saved');
+async function refreshSaved(): Promise<void> {
+  try {
+    const previous = saved.value;
+    const items = await listRecordings();
+    saved.replaceChildren(...items.map(item => new Option(
+      `${item.method} · ${item.scenario} · seed ${item.seed} · ${item.status === 'complete' ? 'hoàn tất' : item.status === 'stopped' ? 'đã dừng' : 'bản ghi cũ'} · ${(item.bytes / 1048576).toFixed(1)} MiB · ${item.id}`,
+      item.id)));
+    if (items.some(item => item.id === previous)) saved.value = previous;
+    element<HTMLButtonElement>('openSaved').disabled = items.length === 0;
+  } catch (error) { message(error); }
+}
 
 function message(value: unknown): void {
   element('connection').textContent = value instanceof Error ? value.message : String(value);
@@ -38,13 +57,14 @@ function message(value: unknown): void {
 function status(value: SessionStatus): void {
   session = value;
   setLivePlayback(value.speed, value.paused, ['stopped', 'complete', 'failed'].includes(value.status));
-  for (const id of ['urgent', 'block', 'unblock']) element<HTMLButtonElement>(id).disabled = value.status !== 'running';
-  pause.disabled = value.status !== 'running';
+  for (const id of ['urgent', 'block', 'unblock']) element<HTMLButtonElement>(id).disabled = value.status !== 'running' || !!value.record_only;
+  pause.disabled = value.status !== 'running' || !!value.record_only;
   pause.textContent = value.paused ? 'Tiếp tục' : 'Tạm dừng';
   element<HTMLButtonElement>('stop').disabled = !['running', 'starting'].includes(value.status);
   element<HTMLButtonElement>('replay').disabled = !['stopped', 'complete', 'failed'].includes(value.status);
   element('modified').hidden = !value.modified;
   message(value.error ?? `${value.method} · ${value.scenario} · ${value.paused ? 'Tạm dừng' : value.status}`);
+  if (value.record_only && value.status === 'running') message(`Đang chạy trước: ${value.method} · ${value.scenario} · ${value.time_s.toFixed(0)}s mô phỏng`);
 }
 async function control(action: string, data: Record<string, unknown> = {}): Promise<void> {
   try {
@@ -52,20 +72,32 @@ async function control(action: string, data: Record<string, unknown> = {}): Prom
     status(await controlSession(session.id, action, data));
   } catch (error) { message(error); }
 }
-async function start(): Promise<void> {
+async function start(recordOnly = false): Promise<void> {
   try {
     element('play').hidden = true; element('seek').hidden = true;
-    source?.close(); resetLive(); map = undefined; decisions.length = 0;
-    status(await createSession(method.value, scenario.value, Number(seed.value)));
+    recordedPlayer.cancel(); source?.close(); resetLive(); map = undefined; decisions.length = 0;
+    status(await createSession(method.value, scenario.value, Number(seed.value), recordOnly));
     if (!session) return;
     source = new EventSource(`/api/events?session=${encodeURIComponent(session.id)}`);
     source.addEventListener('ready', (event) => {
       const data = JSON.parse((event as MessageEvent<string>).data) as { map: MapData; status: SessionStatus };
       map = data.map; status(data.status);
     });
-    source.addEventListener('status', (event) => status(JSON.parse((event as MessageEvent<string>).data) as SessionStatus));
+    source.addEventListener('status', (event) => {
+      const value = JSON.parse((event as MessageEvent<string>).data) as SessionStatus;
+      status(value);
+      if (['complete', 'stopped'].includes(value.status)) {
+        void refreshSaved();
+        if (value.record_only && value.status === 'complete') {
+          source?.close();
+          element('play').hidden = false; element('seek').hidden = false;
+          void recordedPlayer.open(value.id);
+        }
+      }
+    });
     source.addEventListener('frame', (event) => {
       const frame = JSON.parse((event as MessageEvent<string>).data) as Frame;
+      if (session?.record_only) return;
       viewer.pushLive(frame, map);
       element('modified').hidden = !frame.modified;
       if (frame.decision) {
@@ -80,7 +112,21 @@ async function start(): Promise<void> {
     });
   } catch (error) { message(error); }
 }
-element('start').onclick = () => void start();
+element('start').onclick = () => void start(false);
+element('record').onclick = () => void start(true);
+element('refreshSaved').onclick = () => void refreshSaved();
+element('openSaved').onclick = () => void (async () => {
+  try {
+    if (!saved.value) throw new Error('Chưa có bản ghi để xem.');
+    if (session && ['running', 'starting'].includes(session.status)) status(await controlSession(session.id, 'stop'));
+    source?.close(); resetLive();
+    element('play').hidden = false; element('seek').hidden = false;
+    await recordedPlayer.open(saved.value);
+  } catch (error) { message(error); }
+})();
+element('seek').addEventListener('input', () => {
+  if (!viewer.getState().live) recordedPlayer.seek(Number(element<HTMLInputElement>('seek').value));
+});
 method.onchange = () => { if (session) void start(); };
 pause.onclick = () => void control(session?.paused ? 'resume' : 'pause');
 element('stop').onclick = () => void control('stop');
@@ -100,14 +146,9 @@ element<HTMLSelectElement>('speed').onchange = () => {
 element('replay').onclick = () => void (async () => {
   try {
     if (!session) return;
-    const response = await fetch(session.replay);
-    if (!response.ok) throw new Error(`Replay: HTTP ${response.status}`);
-    const lines = (await response.text()).trim().split(/\r?\n/);
-    const header = JSON.parse(lines.shift() ?? '{}') as ReplayHeader;
     source?.close();
     element('play').hidden = false; element('seek').hidden = false;
-    viewer.install({map: header.map, frames: lines.map(line => JSON.parse(line) as Frame), mock: false});
-    message('Replay đã nạp. Bấm Phát ở thanh dưới.');
+    await recordedPlayer.open(session.id);
   } catch (error) { message(error); }
 })();
 void (async () => {
@@ -122,5 +163,6 @@ void (async () => {
     for (const name of data.scenarios) scenario.add(new Option(name, name));
     scenario.value = data.default_scenario; seed.value = String(data.default_seed);
     message('Chọn phương pháp và kịch bản, rồi bấm Bắt đầu.');
+    await refreshSaved();
   } catch (error) { message(error); }
 })();
