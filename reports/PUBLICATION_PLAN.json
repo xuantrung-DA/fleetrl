@@ -618,11 +618,11 @@
         },
         {
           "path": "scripts/update_checksums.py",
-          "bytes": 2106,
+          "bytes": 2287,
           "force_add": false
         }
       ],
-      "bytes": 43307
+      "bytes": 43488
     }
   },
   "ignored": [
@@ -662,5 +662,5 @@
     "Sixteen historical study report files already tracked by Git remain part of a clone. Clean demo smoke did not need them; they were then copied unchanged to verify all 274 publication checksums. No historical raw model/replay was used."
   ],
   "total_files": 112,
-  "total_bytes": 42380009
+  "total_bytes": 42380190
 }

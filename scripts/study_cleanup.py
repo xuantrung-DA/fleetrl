@@ -114,7 +114,10 @@ def main() -> int:
     while True:
         removed, bytes_freed = clean_once(root)
         if removed:
-            log(root, f"Removed {removed} temporary checkpoint files; freed {bytes_freed / 2**30:.2f} GiB")
+            log(
+                root,
+                f"Removed {removed} temporary checkpoint files; freed {bytes_freed / 2**30:.2f} GiB",
+            )
         if not args.watch:
             return 0
         if args.parent_pid is not None and not parent_alive(parent, parent_started):
