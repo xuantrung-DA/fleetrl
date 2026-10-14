@@ -213,3 +213,179 @@ def test_solver_failure_never_reads_a_nonexistent_solution(monkeypatch):
     assert plan.solver_status == "FALLBACK"
     assert plan.fallback_reason == "solver_unknown"
     assert len({d.task_id for d in plan.decisions if d.kind == "task"}) == 2
+
+
+def test_short_reposition_pays_same_interval_as_wait():
+    from fleetrl.optimizer import PROFILES, Candidate
+    from fleetrl.types import Decision
+
+    opt = FleetOptimizer(FleetConfig())
+    wait = Candidate(Decision(0, "wait"), duration_s=5, energy_wh=12 * 5 / 3600)
+    move = Candidate(Decision(0, "reposition"), duration_s=0.5, energy_wh=0.035 + 12 * 0.5 / 3600)
+    for profile in PROFILES:
+        assert opt._candidate_cost(move, profile, 10) > opt._candidate_cost(wait, profile, 10)
+
+
+def test_near_equal_bays_keep_current_parking():
+    state = snapshot(robots=1, soc=0.99)
+    state.robots[0].position = (1, 1)
+    state = replace(state, demand_rate_by_zone=(0.1, 0.1, 0, 0))
+    opt = optimizer()
+    for time_s in range(0, 300, 5):
+        current = replace(
+            state,
+            sim_time_s=time_s,
+            observed_at_s=time_s,
+            demand_rate_by_zone=(0.1, 0.10001) + (0, 0) if time_s % 10 else (0.10001, 0.1, 0, 0),
+        )
+        current.robots[0].observed_at_s = time_s
+        options = opt.generate_candidates(current)
+        assert not any(c.decision.kind == "reposition" for c in options)
+        assert opt.decide(current).decisions[0].kind == "wait"
+
+
+def test_observed_burst_allows_zone_change_but_respects_residence():
+    state = snapshot(robots=1, soc=0.99)
+    r = state.robots[0]
+    r.position = (1, 1)
+    state = replace(state, demand_rate_by_zone=(0, 0.2, 0, 0))
+    opt = optimizer()
+    plan = opt.decide(state, 5)
+    assert plan.decisions[0].kind == "reposition"
+    assert state.warehouse.zone_of(plan.decisions[0].target_position) == 1
+    r.position = plan.decisions[0].target_position
+    r.metadata["parking_changed_at_s"] = 0.0
+    reversed_demand = replace(state, demand_rate_by_zone=(0.2, 0, 0, 0))
+    assert not any(
+        c.decision.kind == "reposition" for c in opt.generate_candidates(reversed_demand)
+    )
+    later = replace(reversed_demand, sim_time_s=65, observed_at_s=65)
+    r.observed_at_s = 65
+    assert any(c.decision.kind == "reposition" for c in opt.generate_candidates(later))
+
+
+def test_committed_parking_goal_is_reserved_and_not_reassigned():
+    state = snapshot(robots=2, soc=0.99)
+    state.robots[1].status = "reposition"
+    state.robots[1].target_position = (1, 1)
+    options = optimizer().generate_candidates(state)
+    assert not any(c.decision.robot_id == 1 for c in options)
+    assert not any(
+        c.decision.kind == "reposition" and c.decision.target_position == (1, 1) for c in options
+    )
+
+
+@pytest.mark.parametrize(
+    "updates",
+    [
+        {"parking_min_improvement": -0.1},
+        {"parking_min_improvement": 2.1},
+        {"parking_min_residence_s": -1},
+        {"parking_min_residence_s": float("nan")},
+    ],
+)
+def test_invalid_parking_guard_config_is_rejected(updates):
+    with pytest.raises(ValueError):
+        FleetConfig(**updates).validate()
+
+
+def test_heuristic_uses_faster_idle_robot_instead_of_slow_nearby_parker():
+    state = snapshot(robots=2, soc=0.99, tasks=1)
+    parker, idle = state.robots
+    parker.status = "reposition"
+    parker.position = (3, 4)
+    parker.target_position = (1, 1)
+    parker.speed_mps = 0.5
+    idle.position = (1, 4)
+    opt = optimizer(controller="heuristic", advanced_charging=False)
+    plan = opt.decide(state)
+    task = next(d for d in plan.decisions if d.kind == "task")
+    assert task.robot_id == idle.id
+    assert next(d for d in plan.decisions if d.robot_id == parker.id).kind == "wait"
+    assert parker.target_position == (1, 1)
+
+
+def test_heuristic_preserves_idle_assignment_when_parking_capacity_is_extra():
+    state = snapshot(robots=2, soc=0.99, tasks=1)
+    parker, idle = state.robots
+    parker.status = "reposition"
+    parker.position = (3, 4)
+    parker.target_position = (1, 1)
+    idle.position = (1, 4)
+    plan = optimizer(controller="heuristic", advanced_charging=False).decide(state)
+    assert next(d for d in plan.decisions if d.kind == "task").robot_id == idle.id
+    assert next(d for d in plan.decisions if d.robot_id == parker.id).kind == "wait"
+
+
+def test_heuristic_backlog_charge_releases_port_at_existing_minimum_target() -> None:
+    state = snapshot(robots=1, soc=0.29, tasks=1, ports=1)
+    plan = optimizer(controller="heuristic", advanced_charging=False).decide(state)
+    charging = next(d for d in plan.decisions if d.kind == "charge")
+    assert charging.target_soc == 0.6
+    assert charging.end_s < 600
+
+
+def test_heuristic_without_backlog_keeps_full_threshold_charge() -> None:
+    state = snapshot(robots=1, soc=0.29, ports=1)
+    plan = optimizer(controller="heuristic", advanced_charging=False).decide(state)
+    assert next(d for d in plan.decisions if d.kind == "charge").target_soc == 0.95
+
+
+def test_partial_heuristic_backlog_charge_keeps_calendar_rejection() -> None:
+    booking = ChargeBooking(99, 0, 0, 0, 2000, 0.95)
+    state = snapshot(robots=1, soc=0.29, tasks=1, bookings=(booking,), ports=1)
+    opt = optimizer(controller="heuristic", advanced_charging=False)
+    assert not any(c.decision.kind in {"task", "charge"} for c in opt.generate_candidates(state))
+
+
+def test_advanced_backlog_charge_limits_session_to_existing_minimum() -> None:
+    state = snapshot(robots=1, soc=0.5, tasks=1, ports=1)
+    choices = optimizer().generate_candidates(state)
+    assert {c.decision.target_soc for c in choices if c.decision.kind == "charge"} == {0.6}
+    assert any(c.decision.kind == "task" for c in choices)
+
+
+def test_backlog_partial_charge_remains_available_to_solver_fallback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from fleetrl.optimizer import cp_model
+
+    monkeypatch.setattr(cp_model.CpSolver, "Solve", lambda *args: cp_model.UNKNOWN)
+    opt = optimizer(controller="fixed")
+    plan = opt.decide(snapshot(robots=1, soc=0.29, tasks=1, ports=1))
+    assert plan.fallback_reason == "solver_unknown"
+    assert next(d for d in plan.decisions if d.kind == "charge").target_soc == 0.6
+
+
+@pytest.mark.parametrize("demand_per_hour,targets", [(90, {0.6}), (0, {0.6, 0.8, 0.95})])
+def test_charge_target_distinguishes_arrival_gap_from_no_demand_shift(
+    demand_per_hour: float, targets: set[float]
+) -> None:
+    state = snapshot(robots=1, soc=0.5, tasks=1, ports=1)
+    state.tasks[0].status = "completed"
+    state.tasks[0].completed_at_s = 20
+    state.robots[0].observed_at_s = 200
+    state = replace(state, sim_time_s=200, observed_at_s=200)
+    choices = optimizer(demand_per_hour=demand_per_hour).generate_candidates(state)
+    assert {c.decision.target_soc for c in choices if c.decision.kind == "charge"} == targets
+
+
+def test_paused_robot_has_no_candidates_or_energy_priority() -> None:
+    state = snapshot(robots=2, soc=0.99, tasks=1)
+    state.robots[0].paused_until_s = 20
+    state.robots[0].battery_wh = 18.1
+    opt = optimizer(controller="heuristic", advanced_charging=False)
+    choices = opt.generate_candidates(state)
+    assert all(c.decision.robot_id != 0 for c in choices)
+    assert 0 not in opt._urgent_ids
+    assert next(d for d in opt.decide(state).decisions if d.kind == "task").robot_id == 1
+
+
+def test_pause_expiry_reenables_task_admission() -> None:
+    state = snapshot(robots=1, soc=0.99, tasks=1)
+    state.robots[0].paused_until_s = 20
+    opt = optimizer()
+    assert not opt.generate_candidates(state)
+    state.robots[0].observed_at_s = 20
+    resumed = replace(state, sim_time_s=20, observed_at_s=20)
+    assert any(c.decision.kind == "task" for c in opt.generate_candidates(resumed))

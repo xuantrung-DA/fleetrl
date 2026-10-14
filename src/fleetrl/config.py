@@ -42,6 +42,8 @@ class FleetConfig:
     charger_wait_bound_s: float = 300.0
     charging_horizon_s: float = 900.0
     deadlock_s: float = 30.0
+    parking_min_improvement: float = 0.02
+    parking_min_residence_s: float = 60.0
     observation_delay_s: float = 0.0
     stale_after_s: float = 10.0
     max_tasks_observed: int = 40
@@ -115,6 +117,8 @@ class FleetConfig:
             raise ValueError("operational durations must be positive")
         if self.observation_delay_s < 0 or self.stale_after_s < 0:
             raise ValueError("observation delays cannot be negative")
+        if not 0 <= self.parking_min_improvement <= 2 or self.parking_min_residence_s < 0:
+            raise ValueError("parking improvement must be 0..2 and residence nonnegative")
         if any(
             getattr(self, k) < 0
             for k in (

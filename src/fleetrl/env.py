@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable
-from dataclasses import asdict
+from dataclasses import asdict, replace
 
 import gymnasium as gym
 import numpy as np
@@ -15,7 +15,7 @@ from .metrics import fleet_metrics
 from .observations import encode_observation, observation_space
 from .optimizer import FleetOptimizer, ObjectiveProfile
 from .simulator import Simulator
-from .types import EventTape
+from .types import DecisionPlan, EventTape, Snapshot
 
 
 class FleetEnv(gym.Env):
@@ -91,6 +91,33 @@ class FleetEnv(gym.Env):
         """Register a read-only callback invoked after every physical simulator tick."""
         self._tick_observer = observer
 
+    def _stale_fallback(self, observed: Snapshot, deadline: float) -> DecisionPlan:
+        """Dispatch locally using fresh telemetry and only previously observed task IDs."""
+        known_ids = {task.id for task in observed.tasks}
+        live = self.sim.snapshot()
+        execution = replace(
+            live,
+            tasks=tuple(task for task in live.tasks if task.id in known_ids),
+            demand_rate_by_zone=observed.demand_rate_by_zone,
+        )
+        candidates = self.optimizer.generate_candidates(execution)
+        if time.perf_counter() >= deadline:
+            plan = self.optimizer._hold(execution, 0, "stale_fallback_budget")
+        else:
+            plan = self.optimizer._heuristic(
+                execution, candidates, 0, "stale_snapshot_local_fallback"
+            )
+        plan.metadata.update(
+            dispatch_authority="local_heuristic",
+            policy_action_used=False,
+            policy_snapshot_version=observed.version,
+            policy_observed_at_s=observed.observed_at_s,
+            policy_snapshot_age_s=observed.sim_time_s - observed.observed_at_s,
+            execution_observed_at_s=execution.observed_at_s,
+            known_task_ids=sorted(known_ids),
+        )
+        return plan
+
     def step(self, action):
         if self._done:
             raise RuntimeError("episode finished; call reset before step")
@@ -134,6 +161,8 @@ class FleetEnv(gym.Env):
             plan = self.optimizer._hold(
                 snapshot, profile, self._inference_failure or "decision_preparation_budget"
             )
+        elif snapshot.sim_time_s - snapshot.observed_at_s > self.config.stale_after_s:
+            plan = self._stale_fallback(snapshot, deadline)
         elif self.config.action_mode == "multiagent" and not invalid:
             from .methods.mappo_dispatch import arbitrate
 
