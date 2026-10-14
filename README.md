@@ -17,7 +17,7 @@ Use Python 3.12 and the isolated .venv. Run from this directory.
 .\.venv\Scripts\python.exe -m fleetrl doctor
 .\.venv\Scripts\python.exe -m fleetrl study plan --config configs/study.yaml
 .\.venv\Scripts\python.exe -m fleetrl train --config configs/methods/ppo_cpsat.yaml --output runs/ppo/seed11
-.\.venv\Scripts\python.exe -m fleetrl demo3d --study runs/study14 --scenario S4 --seed 2000 --port 8765
+.\.venv\Scripts\python.exe -m fleetrl demo3d --study demo3d/models --scenario S4 --seed 1001 --port 8765
 ```
 
 Ready to train means verified execution, updates, checkpoint loading and resume. It does not mean convergence or a proven best algorithm. Historical v1 documentation is in [docs/README_V1.md](docs/README_V1.md); its dependency versions and PPO-only commands are superseded by the v2 guide.
