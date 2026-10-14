@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from ..config import load_config
-from ..evaluation import choose_action, method_config
+from ..evaluation import choose_action, method_config, source_tree_hash
 from ..learning.policies import InferenceSession
 from ..learning.training import checkpoint_metadata
 from ..rl import load_policy
@@ -50,7 +50,10 @@ def discover_methods(study: str | Path) -> dict[str, MethodAvailability]:
         for lock in locks:
             try:
                 value = json.loads(lock.read_text(encoding="utf-8"))
-                checkpoint = Path(value["path"]).resolve()
+                checkpoint = Path(value["path"])
+                if not checkpoint.is_absolute():
+                    checkpoint = lock.parent / checkpoint
+                checkpoint = checkpoint.resolve()
                 if not checkpoint.is_file():
                     continue
                 if file_sha256(checkpoint) != value["sha256"]:
@@ -97,6 +100,7 @@ class DemoSession:
         study: Path,
         output_root: Path,
         availability: MethodAvailability,
+        record_only: bool = False,
     ) -> None:
         if method not in SUPPORTED_METHODS:
             raise ValueError(f"Phương pháp không hỗ trợ: {method}")
@@ -105,6 +109,7 @@ class DemoSession:
         if not availability.available:
             raise ValueError(availability.reason or "Phương pháp chưa sẵn sàng")
         self.id = uuid.uuid4().hex[:12]
+        self.record_only = record_only
         self.method = method
         self.scenario = scenario
         self.seed = int(seed)
@@ -128,6 +133,9 @@ class DemoSession:
         self._thread = threading.Thread(target=self._run, name=f"demo3d-{self.id}", daemon=True)
 
     def start(self) -> None:
+        (self.output_dir / "recording.json").write_text(
+            json.dumps(self.status(), ensure_ascii=False), encoding="utf-8"
+        )
         self._thread.start()
 
     def subscribe(self) -> queue.Queue[dict[str, Any]]:
@@ -171,6 +179,7 @@ class DemoSession:
             "status": self._status,
             "paused": self._paused,
             "speed": self._speed,
+            "record_only": self.record_only,
             "modified": self._modified,
             "error": self._error,
             "replay": f"/api/replay?session={self.id}",
@@ -269,6 +278,10 @@ class DemoSession:
                 )
 
     def _wait_for_tick(self, tick_s: float) -> None:
+        if self.record_only:
+            if self._stopping:
+                raise SessionStopped
+            return
         started = time.perf_counter()
         with self._condition:
             while self._paused and not self._stopping:
@@ -296,7 +309,10 @@ class DemoSession:
         self._last_frame = frame
         replay.write(json.dumps(frame, ensure_ascii=False, allow_nan=False) + "\n")
         replay.flush()
-        self._publish("frame", frame)
+        if not self.record_only:
+            self._publish("frame", frame)
+        elif int(frame["t"] * 2) % 60 == 0:
+            self._publish("status", self.status())
         self._wait_for_tick(self._env.config.tick_s)
 
     def _run(self) -> None:
@@ -327,6 +343,7 @@ class DemoSession:
                 "schema": "fleetrl-viewer/1",
                 "map": map_to_viewer(self._env.sim.warehouse),
                 "session": self.status(),
+                "source_hash": source_tree_hash(),
             }
             with self.replay_path.open("w", encoding="utf-8", newline="\n") as replay:
                 replay.write(json.dumps(replay_header, ensure_ascii=False) + "\n")
@@ -356,6 +373,9 @@ class DemoSession:
         finally:
             if self._env is not None:
                 self._env.close()
+            (self.output_dir / "recording.json").write_text(
+                json.dumps(self.status(), ensure_ascii=False, indent=2), encoding="utf-8"
+            )
             self._publish("status", self.status())
 
 
@@ -380,7 +400,9 @@ class SessionManager:
             "session": self.current.status() if self.current else None,
         }
 
-    def create(self, method: str, scenario: str, seed: int) -> DemoSession:
+    def create(
+        self, method: str, scenario: str, seed: int, record_only: bool = False
+    ) -> DemoSession:
         with self._lock:
             if self.current is not None:
                 self.current.stop(wait=True)
@@ -394,6 +416,7 @@ class SessionManager:
                 self.study,
                 self.output,
                 copy.deepcopy(availability),
+                record_only=record_only,
             )
             self.current = session
             self.sessions[session.id] = session

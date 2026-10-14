@@ -15,11 +15,12 @@ export const createSession = (
   method: string,
   scenario: string,
   seed: number,
+  recordOnly = false,
 ): Promise<SessionStatus> =>
   request<SessionStatus>("/api/sessions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ method, scenario, seed }),
+    body: JSON.stringify({ method, scenario, seed, record_only: recordOnly }),
   });
 
 export const controlSession = (
